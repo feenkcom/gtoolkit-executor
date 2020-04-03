@@ -1,6 +1,6 @@
 Class {
-	#name : #GtExecutorAnswerWithValue,
-	#superclass : #GtExecutorAnswer,
+	#name : #GtExecutorSuccessfulAnswerWithValue,
+	#superclass : #GtExecutorSuccessfulAnswer,
 	#instVars : [
 		'value',
 		'hasValue'
@@ -9,18 +9,18 @@ Class {
 }
 
 { #category : #testing }
-GtExecutorAnswerWithValue >> hasValue [
+GtExecutorSuccessfulAnswerWithValue >> hasValue [
 	^ hasValue
 ]
 
 { #category : #initialization }
-GtExecutorAnswerWithValue >> initialize [
+GtExecutorSuccessfulAnswerWithValue >> initialize [
 	super initialize.
 	hasValue := false.
 ]
 
 { #category : #printing }
-GtExecutorAnswerWithValue >> printOn: aStream [
+GtExecutorSuccessfulAnswerWithValue >> printOn: aStream [
 	self hasValue 
 		ifTrue: [ 
 			aStream 
@@ -31,12 +31,12 @@ GtExecutorAnswerWithValue >> printOn: aStream [
 ]
 
 { #category : #accessing }
-GtExecutorAnswerWithValue >> value [
+GtExecutorSuccessfulAnswerWithValue >> value [
 	^ value
 ]
 
 { #category : #accessing }
-GtExecutorAnswerWithValue >> value: anObject [
+GtExecutorSuccessfulAnswerWithValue >> value: anObject [
 	value := anObject.
 	hasValue := true.
 ]

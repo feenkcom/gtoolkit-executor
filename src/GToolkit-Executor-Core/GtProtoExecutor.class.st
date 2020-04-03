@@ -3,5 +3,5 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtAssert',
 	#classTraits : 'TGtAssert classTrait',
-	#category : #'GToolkit-Executor-Core-Client'
+	#category : #'GToolkit-Executor-Core-Clients'
 }

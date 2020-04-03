@@ -6,6 +6,11 @@ Class {
 	#category : #'GToolkit-Executor-Core-Answers'
 }
 
+{ #category : #factory }
+GtExecutorAnswer class >> exception: anException [ 
+	^ GtExecutorExceptionAnswer new exception: anException
+]
+
 { #category : #testing }
 GtExecutorAnswer class >> isAbstract [
 	^ self name = #GtExecutorAnswer 
@@ -13,12 +18,12 @@ GtExecutorAnswer class >> isAbstract [
 
 { #category : #factory }
 GtExecutorAnswer class >> noValue [
-	^ GtExecutorAnswerWithoutValue new
+	^ GtExecutorSuccessfulAnswerWithoutValue new
 ]
 
 { #category : #factory }
 GtExecutorAnswer class >> noValue: aDescription [
-	^ GtExecutorAnswerWithoutValue new description: aDescription
+	^ GtExecutorSuccessfulAnswerWithoutValue new description: aDescription
 ]
 
 { #category : #factory }
@@ -33,7 +38,7 @@ GtExecutorAnswer class >> null [
 
 { #category : #factory }
 GtExecutorAnswer class >> value: anObject [
-	^ GtExecutorAnswerWithValue new value: anObject
+	^ GtExecutorSuccessfulAnswerWithValue new value: anObject
 ]
 
 { #category : #testing }

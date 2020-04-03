@@ -1,9 +1,15 @@
 Trait {
 	#name : #TGtExecutorProtoCommand,
-	#traits : 'TGtExecutorAllCommands - {#commandsDo:}',
+	#traits : 'TGtExecutorAllCommands',
 	#classTraits : 'TGtExecutorAllCommands classTrait',
 	#category : #'GToolkit-Executor-Core-Traits'
 }
+
+{ #category : #accessing }
+TGtExecutorProtoCommand >> answer [
+	<return: #GtExecutorAnswer>
+	^ self explicitRequirement
+]
 
 { #category : #enumerating }
 TGtExecutorProtoCommand >> commandsDo: oneArgBlock [

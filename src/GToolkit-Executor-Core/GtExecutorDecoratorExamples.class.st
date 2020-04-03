@@ -16,6 +16,22 @@ GtExecutorDecoratorExamples >> anotherPostExecutionCommand [
 ]
 
 { #category : #'examples - answers' }
+GtExecutorDecoratorExamples >> answerOfErroneousDecoringCommand [
+	<gtExample>
+	| aBuilder aCommand anAnswer |
+	aBuilder := self decoratorWithErroneousPostExecutionCommand.
+	aCommand := self valuableCommand.
+	anAnswer := aBuilder execute: aCommand.
+	self assert: anAnswer isAnswer.
+	self assert: anAnswer hasValue not.
+
+	self assert: aCommand hasAnswer.
+	self assert: aCommand hasValue.
+	self assert: aCommand answer value equals: 42.
+	^ anAnswer
+]
+
+{ #category : #'examples - answers' }
 GtExecutorDecoratorExamples >> answerOfOneDecoringCommand [
 	<gtExample>
 	| aBuilder aCommand anAnswer |
@@ -80,6 +96,15 @@ GtExecutorDecoratorExamples >> basicPostExecutionCommand [
 	^ aCommand
 ]
 
+{ #category : #'examples - exception handlers' }
+GtExecutorDecoratorExamples >> basicSkippingHandler [
+	<gtExample>
+	| aHandler |
+	aHandler := GtExecutorExceptionHandler skipping.
+	self assert: aHandler isNotNil.
+	^ aHandler
+]
+
 { #category : #'examples - commands' }
 GtExecutorDecoratorExamples >> basicValuableCommand [
 	<gtExample>
@@ -88,6 +113,18 @@ GtExecutorDecoratorExamples >> basicValuableCommand [
 	self assert: aCommand hasAnswer not.
 	self assert: aCommand hasValue not.
 	^ aCommand
+]
+
+{ #category : #'examples - decorator' }
+GtExecutorDecoratorExamples >> decoratorWithErroneousPostExecutionCommand [
+	<gtExample>
+	| aDecorator aCommand |
+	aDecorator := self basicDecorator.
+	aCommand := self erroneousPostExecutionCommand.
+	aDecorator command: aCommand.
+	self assert: aDecorator commands size equals: 1.
+	self assert: aDecorator commands first equals: aCommand.
+	^ aDecorator
 ]
 
 { #category : #'examples - decorator' }
@@ -124,6 +161,29 @@ GtExecutorDecoratorExamples >> defaultPostExecutionCommand [
 	^ GtExecutorPostExecutionCommand
 ]
 
+{ #category : #'examples - commands' }
+GtExecutorDecoratorExamples >> erroneousPostExecutionCommand [
+	<gtExample>
+	| aCommand aValuable |
+	aCommand := self basicPostExecutionCommand.
+	aValuable := [ :aSubCommand | aSubCommand result: 72 / 0 ].
+	aCommand valuable: aValuable.
+	self assert: aCommand valuable equals: aValuable.
+	^ aCommand
+]
+
+{ #category : #'examples - commands' }
+GtExecutorDecoratorExamples >> erroneousValuableCommand [
+	<gtExample>
+	| aCommand aValuable |
+	aCommand := self basicValuableCommand.
+	aValuable := [ 42 / 0 ].
+	aCommand valuable: aValuable.
+	self assert: aCommand valuable equals: aValuable.
+	self assert: aCommand hasAnswer not.
+	^ aCommand
+]
+
 { #category : #'examples - execution' }
 GtExecutorDecoratorExamples >> executingBasicValuableCommand [
 	<gtExample>
@@ -136,6 +196,71 @@ GtExecutorDecoratorExamples >> executingBasicValuableCommand [
 	^ aCommand
 ]
 
+{ #category : #'examples - exception handlers' }
+GtExecutorDecoratorExamples >> executingErroneousCommandWithBasicSkippingHandler [
+	<gtExample>
+	| aHandler aCommand aNextContext |
+	aHandler := self basicSkippingHandler.
+	aCommand := self erroneousValuableCommand.
+	aNextContext := aHandler execute: aCommand.
+	self assert: aNextContext class equals: GtExecutorExecutionExceptionContext.
+	self assert: aNextContext exception class equals: ZeroDivide.
+	^ aNextContext
+]
+
+{ #category : #'examples - exception handlers' }
+GtExecutorDecoratorExamples >> executingValuableCommandWithBasicSkippingHandler [
+	<gtExample>
+	| aHandler aCommand aNextContext |
+	aHandler := self basicSkippingHandler.
+	aCommand := self valuableCommand.
+	aNextContext := aHandler execute: aCommand.
+	self assert: aNextContext class equals: GtExecutorExecutionContinueContext.
+	^ aNextContext
+]
+
+{ #category : #'examples - exception handlers' }
+GtExecutorDecoratorExamples >> executingValuableCommandWithBasicSkippingHandler_ErrorContext [
+	<gtExample>
+	| aHandler aCommand aNextContext aContext |
+	aHandler := self basicSkippingHandler.
+	aCommand := self valuableCommand.
+	aContext := self executionErrorContext.
+	aNextContext := aHandler execute: aCommand previousContext: aContext.
+	self assert: aNextContext class equals: GtExecutorExecutionSkipContext.
+	^ aNextContext
+]
+
+{ #category : #'examples - exception handlers' }
+GtExecutorDecoratorExamples >> executionErrorContext [ 
+	<gtExample>
+	| aContext |
+	aContext := GtExecutorExecutionContext exception: ZeroDivide new.
+	self assert: aContext exception class equals: ZeroDivide.
+	^ aContext
+]
+
+{ #category : #'examples - execution' }
+GtExecutorDecoratorExamples >> executionOfErroneousPostExecutionCommand [
+	<gtExample>
+	| aBuilder aCommand |
+	aBuilder := self decoratorWithErroneousPostExecutionCommand.
+	aCommand := self valuableCommand.
+	aBuilder execute: aCommand.
+	self assert: aCommand hasAnswer.
+	self assert: aCommand answer value equals: 42.
+	^ aCommand
+]
+
+{ #category : #'examples - exception handlers' }
+GtExecutorDecoratorExamples >> executionStartContext [ 
+	<gtExample>
+	| aContext |
+	aContext := GtExecutorExecutionContext start.
+	self assert: aContext isNotNil.
+	^ aContext
+]
+
 { #category : #'examples - execution' }
 GtExecutorDecoratorExamples >> executionWithOneDecoringCommand [
 	<gtExample>
@@ -143,7 +268,7 @@ GtExecutorDecoratorExamples >> executionWithOneDecoringCommand [
 	aBuilder := self decoratorWithOnePostExecutionCommand.
 	aCommand := self valuableCommand.
 	aBuilder execute: aCommand.
-	self assert:aCommand hasAnswer.
+	self assert: aCommand hasAnswer.
 	self assert: aCommand answer value equals: 108.
 	^ aCommand
 ]
@@ -172,6 +297,16 @@ GtExecutorDecoratorExamples >> executionWithoutDecoratingCommands [
 	self assert: aCommand hasValue.
 	self assert: aCommand answer value equals: 42.
 	^ aCommand
+]
+
+{ #category : #'examples - answers' }
+GtExecutorDecoratorExamples >> nullAnswer [
+	<gtExample>
+	| anAnswer |
+	anAnswer := GtExecutorAnswer null.
+	self assert: anAnswer isAnswer not.
+	self assert: anAnswer hasValue not.
+	^ anAnswer
 ]
 
 { #category : #'examples - decorated commands' }

@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtExecutorReplacingDecoratorHolder,
-	#traits : 'TGtExecutorDecoratorHolder - {#newCommandDecorator}',
+	#traits : 'TGtExecutorDecoratorHolder',
 	#classTraits : 'TGtExecutorDecoratorHolder classTrait',
 	#category : #'GToolkit-Executor-Core-Traits'
 }

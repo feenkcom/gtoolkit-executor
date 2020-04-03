@@ -16,3 +16,8 @@ GtExecutorNullAnswer >> hasValue [
 GtExecutorNullAnswer >> isAnswer [
 	^ false
 ]
+
+{ #category : #printing }
+GtExecutorNullAnswer >> printOn: aStream [ 
+	aStream nextPutAll: 'No answer'
+]

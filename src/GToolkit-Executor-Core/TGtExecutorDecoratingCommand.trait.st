@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtExecutorDecoratingCommand,
-	#traits : 'TGtExecutorAllCommands - {#commandsDo:} + TGtExecutorReplacingCommand + TGtExecutorCommand',
+	#traits : 'TGtExecutorAllCommands + TGtExecutorReplacingCommand + TGtExecutorCommand',
 	#classTraits : 'TGtExecutorAllCommands classTrait + TGtExecutorReplacingCommand classTrait + TGtExecutorCommand classTrait',
 	#category : #'GToolkit-Executor-Core-Traits'
 }

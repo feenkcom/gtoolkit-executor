@@ -4,9 +4,10 @@ Class {
 	#traits : 'TGtAssert',
 	#classTraits : 'TGtAssert classTrait',
 	#instVars : [
-		'commands'
+		'commands',
+		'exceptionHandler'
 	],
-	#category : #'GToolkit-Executor-Core-Decorator'
+	#category : #'GToolkit-Executor-Core-Decorators'
 }
 
 { #category : #convenience }
@@ -38,13 +39,32 @@ GtExecutorDecorator >> decorate: aCommand [
 		description: [ 'Command must be non-nil' ].
 	^ self commands 
 		inject: aCommand 
-		into: [ :aComposition :eachDecoratedCommand | 
+		into: [ :aComposition :eachDecoratedCommand |
 			eachDecoratedCommand copy command: aComposition ].
 ]
 
-{ #category : #initialization }
+{ #category : #defaults }
 GtExecutorDecorator >> defaultCommands [
 	^ Array empty 
+]
+
+{ #category : #defaults }
+GtExecutorDecorator >> defaultExceptionHandler [
+	^ GtExecutorExceptionHandler default
+]
+
+{ #category : #accessing }
+GtExecutorDecorator >> exceptionHandler [
+	<return: #GtExecutorExceptionHandler>
+	^ exceptionHandler
+]
+
+{ #category : #accessing }
+GtExecutorDecorator >> exceptionHandler: aGtExecutorExceptionHandler [
+	self 
+		assert: [ GtExecutorExceptionHandler isNotNil ] 
+		description: [ 'Exception handler must be non-nil' ].
+	exceptionHandler := aGtExecutorExceptionHandler
 ]
 
 { #category : #execution }
@@ -52,7 +72,7 @@ GtExecutorDecorator >> execute: aCommand [
 	<return: #GtExecutorAnswer>
 	| aDecoratedCommand |
 	aDecoratedCommand := self decorate: aCommand.
-	aDecoratedCommand execute.
+	self exceptionHandler execute: aDecoratedCommand.
 	^ aDecoratedCommand answer.
 ]
 
@@ -60,4 +80,5 @@ GtExecutorDecorator >> execute: aCommand [
 GtExecutorDecorator >> initialize [
 	super initialize.
 	commands := self defaultCommands.
+	exceptionHandler := self defaultExceptionHandler.
 ]

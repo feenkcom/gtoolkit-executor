@@ -10,7 +10,12 @@ TGtExecutorCommand classSide >> answerOptionName [
 	^ #commandAnswer
 ]
 
-{ #category : #'accessing - options - answer' }
+{ #category : #accessing }
+TGtExecutorCommand classSide >> exceptionHandlerOptionName [
+	^ #exceptionHandler
+]
+
+{ #category : #'accessing - options' }
 TGtExecutorCommand >> answer [
 	<return: #GtExecutorAnswer>
 	^ self 
@@ -18,7 +23,7 @@ TGtExecutorCommand >> answer [
 		ifAbsent: [ GtExecutorAnswer null ]
 ]
 
-{ #category : #'accessing - options - answer' }
+{ #category : #'accessing - options' }
 TGtExecutorCommand >> answer: aGtExecutorAnswer [
 	self 
 		assert: [ aGtExecutorAnswer isNotNil ]

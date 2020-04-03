@@ -3,5 +3,5 @@ Class {
 	#superclass : #GtProtoExecutor,
 	#traits : 'TGtExecutorReplacingDecoratorHolder',
 	#classTraits : 'TGtExecutorReplacingDecoratorHolder classTrait',
-	#category : #'GToolkit-Executor-Core-Client'
+	#category : #'GToolkit-Executor-Core-Clients'
 }

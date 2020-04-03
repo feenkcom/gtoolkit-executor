@@ -1,7 +1,7 @@
 Class {
 	#name : #GtExecutorReplacingDecorator,
 	#superclass : #GtExecutorDecorator,
-	#category : #'GToolkit-Executor-Core-Decorator'
+	#category : #'GToolkit-Executor-Core-Decorators'
 }
 
 { #category : #convenience }

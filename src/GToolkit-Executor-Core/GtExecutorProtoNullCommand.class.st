@@ -11,6 +11,11 @@ GtExecutorProtoNullCommand class >> isAbstract [
 	^ self name = #GtExecutorProtoNullCommand 
 ]
 
+{ #category : #accessing }
+GtExecutorProtoNullCommand >> answer [
+	^ GtExecutorAnswer null
+]
+
 { #category : #testing }
 GtExecutorProtoNullCommand >> hasAnswer [
 	^ false
