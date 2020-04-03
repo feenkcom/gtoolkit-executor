@@ -5,7 +5,18 @@ TGtExecutorAnswer >> gtCommandsFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Answers';
-		priority: 1;
+		priority: 2;
 		object: [ self command ];
 		view: #gtCommandsFor:
+]
+
+{ #category : #'*GToolkit-Executor-UI' }
+TGtExecutorAnswer >> gtDescriptionFor: aView [
+	<gtView>
+	self hasDescription ifFalse: [ ^ aView empty ].
+	^ aView textEditor
+		title: 'Description';
+		priority: 1;
+		glamorousCodeFontAndSize;
+		text: [ self description ]
 ]
