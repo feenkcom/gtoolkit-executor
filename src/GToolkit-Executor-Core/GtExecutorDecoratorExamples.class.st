@@ -1,0 +1,190 @@
+Class {
+	#name : #GtExecutorDecoratorExamples,
+	#superclass : #Object,
+	#category : #'GToolkit-Executor-Core-Examples'
+}
+
+{ #category : #'examples - commands' }
+GtExecutorDecoratorExamples >> anotherPostExecutionCommand [
+	<gtExample>
+	| aCommand aValuable |
+	aCommand := self basicPostExecutionCommand.
+	aValuable := [ :aSubCommand | aSubCommand result: 72 ].
+	aCommand valuable: aValuable.
+	self assert: aCommand valuable equals: aValuable.
+	^ aCommand
+]
+
+{ #category : #'examples - decorator' }
+GtExecutorDecoratorExamples >> basicDecorator [
+	<gtExample>
+	| aDecorator |
+	aDecorator := self defaultDecorator new.
+	self assert: aDecorator commands size isZero.
+	^ aDecorator
+]
+
+{ #category : #'examples - commands' }
+GtExecutorDecoratorExamples >> basicPostExecutionCommand [
+	<gtExample>
+	| aCommand |
+	aCommand := self defaultPostExecutionCommand new.
+	self assert: aCommand command equals: GtExecutorCommand null.
+	self assert: aCommand valuable isNotNil.
+	^ aCommand
+]
+
+{ #category : #'examples - commands' }
+GtExecutorDecoratorExamples >> basicValuableCommand [
+	<gtExample>
+	| aCommand |
+	aCommand := GtExecutorValuableCommand new.
+	self assert: aCommand result equals: nil.
+	aCommand execute.
+	self assert: aCommand result equals: nil.
+	^ aCommand
+]
+
+{ #category : #'examples - decorator' }
+GtExecutorDecoratorExamples >> decoratorWithOnePostExecutionCommand [
+	<gtExample>
+	| aDecorator aCommand |
+	aDecorator := self basicDecorator.
+	aCommand := self postExecutionCommand.
+	aDecorator command: aCommand.
+	self assert: aDecorator commands size equals: 1.
+	self assert: aDecorator commands first equals: aCommand.
+	^ aDecorator
+]
+
+{ #category : #'examples - decorator' }
+GtExecutorDecoratorExamples >> decoratorWithTwoPostExecutionCommands [
+	<gtExample>
+	| aDecorator aCommand |
+	aDecorator := self decoratorWithOnePostExecutionCommand.
+	aCommand := self anotherPostExecutionCommand.
+	aDecorator command: aCommand.
+	self assert: aDecorator commands size equals: 2.
+	self assert: aDecorator commands second equals: aCommand.
+	^ aDecorator
+]
+
+{ #category : #'examples - decorator' }
+GtExecutorDecoratorExamples >> defaultDecorator [
+	^ GtExecutorDecorator
+]
+
+{ #category : #'examples - commands' }
+GtExecutorDecoratorExamples >> defaultPostExecutionCommand [
+	^ GtExecutorPostExecutionCommand
+]
+
+{ #category : #'examples - execution' }
+GtExecutorDecoratorExamples >> executionWithOneDecoringCommand [
+	<gtExample>
+	| aBuilder aCommand |
+	aBuilder := self decoratorWithOnePostExecutionCommand.
+	aCommand := self valuableCommand.
+	aBuilder execute: aCommand.
+	self assert: aCommand result equals: 108.
+	^ aCommand
+]
+
+{ #category : #'examples - execution' }
+GtExecutorDecoratorExamples >> executionWithTwoDecoratingCommands [
+	<gtExample>
+	| aBuilder aCommand |
+	aBuilder := self decoratorWithTwoPostExecutionCommands.
+	aCommand := self valuableCommand.
+	aBuilder execute: aCommand.
+	self assert: aCommand result equals: 72.
+	^ aCommand
+]
+
+{ #category : #'examples - execution' }
+GtExecutorDecoratorExamples >> executionWithoutDecoratingCommands [
+	<gtExample>
+	| aBuilder aCommand |
+	aBuilder := self basicDecorator.
+	aCommand := self valuableCommand.
+	aBuilder execute: aCommand.
+	self assert: aCommand result equals: 42.
+	^ aCommand
+]
+
+{ #category : #'examples - decorated commands' }
+GtExecutorDecoratorExamples >> oneDecoratingCommand [
+	<gtExample>
+	| aDecorator aCommand aDecoratingCommand aTempCommand |
+	aDecorator := self decoratorWithOnePostExecutionCommand.
+	aCommand := self valuableCommand.
+	aDecoratingCommand := aDecorator decorate: aCommand.
+
+	"Even after the decoration, the decorator commands are intact"
+	self assert: aDecorator commands first command equals: GtExecutorCommand null.
+
+	"Decorating commands are different instances from those kept by the decorator"
+	self assert: (aDecoratingCommand == aDecorator commands first) not.
+
+	"Check the command chain order"
+	aTempCommand := self valuableCommand.
+	aDecoratingCommand valuable value: aTempCommand.
+	self assert: aTempCommand result equals: 108.
+
+	"The second command in chain is the decorated command"
+	self assert: aDecoratingCommand command equals: aCommand.
+	^ aDecoratingCommand
+]
+
+{ #category : #'examples - commands' }
+GtExecutorDecoratorExamples >> postExecutionCommand [
+	<gtExample>
+	| aCommand aValuable |
+	aCommand := self basicPostExecutionCommand.
+	aValuable := [ :aSubCommand | aSubCommand result: 108 ].
+	aCommand valuable: aValuable.
+	self assert: aCommand valuable equals: aValuable.
+	^ aCommand
+]
+
+{ #category : #'examples - decorated commands' }
+GtExecutorDecoratorExamples >> twoDecoratingCommands [
+	<gtExample>
+	| aDecorator aCommand aDecoratingCommand aTempCommand |
+	aDecorator := self decoratorWithTwoPostExecutionCommands.
+	aCommand := self valuableCommand.
+	aDecoratingCommand := aDecorator decorate: aCommand.
+	
+	"Even after the decoration, the decorator commands are intact"
+	self assert: aDecorator commands first command equals: GtExecutorCommand null.
+	self assert: aDecorator commands second command equals: GtExecutorCommand null.
+
+	"Decorating commands are different instances from those kept by the decorator"
+	self assert: (aDecoratingCommand == aDecorator commands first) not.
+	self assert: (aDecoratingCommand == aDecorator commands second) not.
+	self assert: (aDecoratingCommand command == aDecorator commands first) not.
+	self assert: (aDecoratingCommand command == aDecorator commands second) not.
+
+	"Check the command chain order"
+	aTempCommand := self valuableCommand.
+	aDecoratingCommand valuable value: aTempCommand.
+	self assert: aTempCommand result equals: 72.
+	aDecoratingCommand command valuable value: aTempCommand.
+	self assert: aTempCommand result equals: 108.
+
+	"The third command in chain is the decorated command"
+	self assert: aDecoratingCommand command command equals: aCommand.
+	^ aDecoratingCommand
+]
+
+{ #category : #'examples - commands' }
+GtExecutorDecoratorExamples >> valuableCommand [
+	<gtExample>
+	| aCommand aValuable |
+	aCommand := self basicValuableCommand.
+	aValuable := [ 42 ].
+	aCommand valuable: aValuable.
+	self assert: aCommand valuable equals: aValuable.
+	self assert: aCommand result isNil.
+	^ aCommand
+]
