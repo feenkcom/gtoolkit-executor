@@ -16,12 +16,3 @@ TGtExecutorDecoratingCommand >> commandsDo: oneArgBlock [
 	oneArgBlock cull: self.
 	self command commandsDo: oneArgBlock
 ]
-
-{ #category : #'gt-extension' }
-TGtExecutorDecoratingCommand >> gtCommandsFor: aView [
-	<gtView>
-	self command ifNil: [ ^ aView empty ].
-	^ aView list 
-		title: 'Commands';
-		items: [ self allCommands ]
-]

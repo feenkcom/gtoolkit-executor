@@ -8,3 +8,8 @@ Class {
 GtExecutorAnswerWithoutValue >> hasValue [
 	^ false
 ]
+
+{ #category : #printing }
+GtExecutorAnswerWithoutValue >> printOn: aStream [
+	aStream nextPutAll: 'Answer without value'.
+]

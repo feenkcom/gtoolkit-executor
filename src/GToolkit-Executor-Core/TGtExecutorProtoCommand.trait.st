@@ -16,11 +16,6 @@ TGtExecutorProtoCommand >> execute [
 	self explicitRequirement
 ]
 
-{ #category : #'gt-extension' }
-TGtExecutorProtoCommand >> gtCommandsFor: aView [
-	^ aView empty
-]
-
 { #category : #testing }
 TGtExecutorProtoCommand >> hasAnswer [
 	<return: #Boolean>

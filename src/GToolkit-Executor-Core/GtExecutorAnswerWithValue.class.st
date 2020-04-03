@@ -27,7 +27,7 @@ GtExecutorAnswerWithValue >> printOn: aStream [
 				nextPutAll: 'Answer with value: ';
 			 	print: self value ] 
 		ifFalse: [ 
-			aStream nextPutAll: 'Asnwer without value' ]
+			aStream nextPutAll: 'Answer without value' ]
 ]
 
 { #category : #accessing }

@@ -56,16 +56,6 @@ GtExecutorDecorator >> execute: aCommand [
 	^ aDecoratedCommand answer.
 ]
 
-{ #category : #'gt-extension' }
-GtExecutorDecorator >> gtCommandsFor: aView [
-	<gtView>
-	self commands ifNil: [ ^ aView empty ].
-	^ aView list
-		title: 'Commands';
-		priority: 1;
-		items: [ self commands reversed ]
-]
-
 { #category : #initialization }
 GtExecutorDecorator >> initialize [
 	super initialize.
