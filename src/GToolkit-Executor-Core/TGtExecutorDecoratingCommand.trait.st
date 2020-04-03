@@ -14,5 +14,6 @@ TGtExecutorDecoratingCommand >> command [
 { #category : #enumerating }
 TGtExecutorDecoratingCommand >> commandsDo: oneArgBlock [
 	oneArgBlock cull: self.
+	self command ifNil: [ ^ self ].
 	self command commandsDo: oneArgBlock
 ]

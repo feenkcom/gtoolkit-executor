@@ -21,7 +21,21 @@ GtExecutorExceptionAnswer >> exception: anException [
 	exception := anException
 ]
 
+{ #category : #'exception handling' }
+GtExecutorExceptionAnswer >> freeze [
+	self exception freeze
+]
+
 { #category : #testing }
 GtExecutorExceptionAnswer >> hasValue [
 	^ false
+]
+
+{ #category : #printing }
+GtExecutorExceptionAnswer >> printOn: aStream [ 
+	aStream nextPutAll: 'Answer with exception'.
+	self exception ifNil: [ ^ self ].
+	aStream 
+		nextPutAll: ': ';
+		print: self exception.
 ]

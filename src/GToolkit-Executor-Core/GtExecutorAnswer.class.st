@@ -8,7 +8,7 @@ Class {
 
 { #category : #factory }
 GtExecutorAnswer class >> exception: anException [ 
-	^ GtExecutorExceptionAnswer new exception: anException
+	^ GtExecutorExceptionAnswer new exception: anException; freeze
 ]
 
 { #category : #testing }

@@ -48,6 +48,22 @@ GtExecutorDecoratorExamples >> answerOfOneDecoringCommand [
 ]
 
 { #category : #'examples - answers' }
+GtExecutorDecoratorExamples >> answerOfSecondErroneousPostExecutionCommand [
+	<gtExample>
+	| aBuilder aCommand anAnswer |
+	aBuilder := self decoratorWithSecondErroneousPostExecutionCommand.
+	aCommand := self valuableCommand.
+	anAnswer := aBuilder execute: aCommand.
+	self assert: anAnswer isAnswer.
+	self assert: anAnswer hasValue not.
+
+	self assert: aCommand hasAnswer.
+	self assert: aCommand hasValue.
+	self assert: aCommand answer value equals: 42.
+	^ anAnswer
+]
+
+{ #category : #'examples - answers' }
 GtExecutorDecoratorExamples >> answerOfTwoDecoringCommands [
 	<gtExample>
 	| aBuilder aCommand anAnswer |
@@ -140,6 +156,18 @@ GtExecutorDecoratorExamples >> decoratorWithOnePostExecutionCommand [
 ]
 
 { #category : #'examples - decorator' }
+GtExecutorDecoratorExamples >> decoratorWithSecondErroneousPostExecutionCommand [
+	<gtExample>
+	| aDecorator aCommand |
+	aDecorator := self decoratorWithErroneousPostExecutionCommand.
+	aCommand := self anotherPostExecutionCommand.
+	aDecorator command: aCommand.
+	self assert: aDecorator commands size equals: 2.
+	self assert: aDecorator commands second equals: aCommand.
+	^ aDecorator
+]
+
+{ #category : #'examples - decorator' }
 GtExecutorDecoratorExamples >> decoratorWithTwoPostExecutionCommands [
 	<gtExample>
 	| aDecorator aCommand |
@@ -166,7 +194,7 @@ GtExecutorDecoratorExamples >> erroneousPostExecutionCommand [
 	<gtExample>
 	| aCommand aValuable |
 	aCommand := self basicPostExecutionCommand.
-	aValuable := [ :aSubCommand | aSubCommand result: 72 / 0 ].
+	aValuable := [ :aSubCommand | aSubCommand result: 108 / 0 ].
 	aCommand valuable: aValuable.
 	self assert: aCommand valuable equals: aValuable.
 	^ aCommand
@@ -245,6 +273,18 @@ GtExecutorDecoratorExamples >> executionOfErroneousPostExecutionCommand [
 	<gtExample>
 	| aBuilder aCommand |
 	aBuilder := self decoratorWithErroneousPostExecutionCommand.
+	aCommand := self valuableCommand.
+	aBuilder execute: aCommand.
+	self assert: aCommand hasAnswer.
+	self assert: aCommand answer value equals: 42.
+	^ aCommand
+]
+
+{ #category : #'examples - execution' }
+GtExecutorDecoratorExamples >> executionOfSecondErroneousPostExecutionCommand [
+	<gtExample>
+	| aBuilder aCommand |
+	aBuilder := self decoratorWithSecondErroneousPostExecutionCommand.
 	aCommand := self valuableCommand.
 	aBuilder execute: aCommand.
 	self assert: aCommand hasAnswer.
