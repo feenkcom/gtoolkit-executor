@@ -16,6 +16,7 @@ GtExecutorPostExecutionCommand >> defaultValuable [
 GtExecutorPostExecutionCommand >> execute [
 	self executeSubCommand.
 	self valuable value: self command.
+	self answer: (GtExecutorAnswer noValueWithSuccess)
 ]
 
 { #category : #initialization }

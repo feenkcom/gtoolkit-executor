@@ -1,13 +1,13 @@
 Trait {
 	#name : #TGtExecutorDecoratingCommand,
-	#traits : 'TGtExecutorAllCommands - {#commandsDo:} + TGtExecutorReplacingCommand',
-	#classTraits : 'TGtExecutorAllCommands classTrait + TGtExecutorReplacingCommand classTrait',
+	#traits : 'TGtExecutorAllCommands - {#commandsDo:} + TGtExecutorReplacingCommand + TGtExecutorCommand',
+	#classTraits : 'TGtExecutorAllCommands classTrait + TGtExecutorReplacingCommand classTrait + TGtExecutorCommand classTrait',
 	#category : #'GToolkit-Executor-Core-Traits'
 }
 
 { #category : #accessing }
 TGtExecutorDecoratingCommand >> command [
-	<return: #TGtExecutorCommand>
+	<return: #TGtExecutorProtoCommand>
 	^ self explicitRequirement
 ]
 

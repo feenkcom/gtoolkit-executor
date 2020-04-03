@@ -1,8 +1,6 @@
 Class {
 	#name : #GtExecutorDecoratingCommand,
-	#superclass : #GtExecutorProtoCommand,
-	#traits : 'TGtExecutorDecoratingCommand',
-	#classTraits : 'TGtExecutorDecoratingCommand classTrait',
+	#superclass : #GtExecutorDecoratingProtoCommand,
 	#instVars : [
 		'command'
 	],

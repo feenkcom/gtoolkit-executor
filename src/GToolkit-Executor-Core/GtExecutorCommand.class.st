@@ -1,6 +1,8 @@
 Class {
 	#name : #GtExecutorCommand,
 	#superclass : #GtExecutorProtoCommand,
+	#traits : 'TGtExecutorCommand',
+	#classTraits : 'TGtExecutorCommand classTrait',
 	#category : #'GToolkit-Executor-Core-Commands'
 }
 

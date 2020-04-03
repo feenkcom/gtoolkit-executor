@@ -2,7 +2,6 @@ Class {
 	#name : #GtExecutorValuableCommand,
 	#superclass : #GtExecutorCommand,
 	#instVars : [
-		'result',
 		'valuable'
 	],
 	#category : #'GToolkit-Executor-Core-Commands'
@@ -20,14 +19,9 @@ GtExecutorValuableCommand >> printOn: aStream [
 		print: self valuable
 ]
 
-{ #category : #accessing }
-GtExecutorValuableCommand >> result [
-	^ result
-]
-
-{ #category : #accessing }
+{ #category : #convenience }
 GtExecutorValuableCommand >> result: anObject [
-	result := anObject
+	self answer: (GtExecutorAnswer value: anObject)
 ]
 
 { #category : #accessing }

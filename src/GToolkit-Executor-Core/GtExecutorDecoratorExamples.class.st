@@ -15,6 +15,51 @@ GtExecutorDecoratorExamples >> anotherPostExecutionCommand [
 	^ aCommand
 ]
 
+{ #category : #'examples - answers' }
+GtExecutorDecoratorExamples >> answerOfOneDecoringCommand [
+	<gtExample>
+	| aBuilder aCommand anAnswer |
+	aBuilder := self decoratorWithOnePostExecutionCommand.
+	aCommand := self valuableCommand.
+	anAnswer := aBuilder execute: aCommand.
+	self assert: anAnswer isAnswer.
+	self assert: anAnswer hasValue not.
+
+	self assert: aCommand hasAnswer.
+	self assert: aCommand hasValue.
+	self assert: aCommand answer value equals: 108.
+	^ anAnswer
+]
+
+{ #category : #'examples - answers' }
+GtExecutorDecoratorExamples >> answerOfTwoDecoringCommands [
+	<gtExample>
+	| aBuilder aCommand anAnswer |
+	aBuilder := self decoratorWithTwoPostExecutionCommands.
+	aCommand := self valuableCommand.
+	anAnswer := aBuilder execute: aCommand.
+	self assert: anAnswer isAnswer.
+	self assert: anAnswer hasValue not.
+
+	self assert: aCommand hasAnswer.
+	self assert: aCommand hasValue.
+	self assert: aCommand answer value equals: 72.
+	^ anAnswer
+]
+
+{ #category : #'examples - answers' }
+GtExecutorDecoratorExamples >> answerOfValuableCommand [
+	<gtExample>
+	| aBuilder aCommand anAnswer |
+	aBuilder := self basicDecorator.
+	aCommand := self valuableCommand.
+	anAnswer := aBuilder execute: aCommand.
+	self assert: anAnswer isAnswer.
+	self assert: anAnswer hasValue.
+	self assert: aCommand answer value equals: 42.
+	^ anAnswer
+]
+
 { #category : #'examples - decorator' }
 GtExecutorDecoratorExamples >> basicDecorator [
 	<gtExample>
@@ -31,6 +76,7 @@ GtExecutorDecoratorExamples >> basicPostExecutionCommand [
 	aCommand := self defaultPostExecutionCommand new.
 	self assert: aCommand command equals: GtExecutorCommand null.
 	self assert: aCommand valuable isNotNil.
+	self assert: aCommand hasAnswer not.
 	^ aCommand
 ]
 
@@ -39,9 +85,8 @@ GtExecutorDecoratorExamples >> basicValuableCommand [
 	<gtExample>
 	| aCommand |
 	aCommand := GtExecutorValuableCommand new.
-	self assert: aCommand result equals: nil.
-	aCommand execute.
-	self assert: aCommand result equals: nil.
+	self assert: aCommand hasAnswer not.
+	self assert: aCommand hasValue not.
 	^ aCommand
 ]
 
@@ -80,13 +125,26 @@ GtExecutorDecoratorExamples >> defaultPostExecutionCommand [
 ]
 
 { #category : #'examples - execution' }
+GtExecutorDecoratorExamples >> executingBasicValuableCommand [
+	<gtExample>
+	| aCommand |
+	aCommand := self basicValuableCommand.
+	aCommand execute.
+	self assert: aCommand hasAnswer.
+	self assert: aCommand hasValue.
+	self assert: aCommand answer value isNil.
+	^ aCommand
+]
+
+{ #category : #'examples - execution' }
 GtExecutorDecoratorExamples >> executionWithOneDecoringCommand [
 	<gtExample>
 	| aBuilder aCommand |
 	aBuilder := self decoratorWithOnePostExecutionCommand.
 	aCommand := self valuableCommand.
 	aBuilder execute: aCommand.
-	self assert: aCommand result equals: 108.
+	self assert:aCommand hasAnswer.
+	self assert: aCommand answer value equals: 108.
 	^ aCommand
 ]
 
@@ -97,7 +155,9 @@ GtExecutorDecoratorExamples >> executionWithTwoDecoratingCommands [
 	aBuilder := self decoratorWithTwoPostExecutionCommands.
 	aCommand := self valuableCommand.
 	aBuilder execute: aCommand.
-	self assert: aCommand result equals: 72.
+	self assert: aCommand hasAnswer.
+	self assert: aCommand hasValue.
+	self assert: aCommand answer value equals: 72.
 	^ aCommand
 ]
 
@@ -108,7 +168,9 @@ GtExecutorDecoratorExamples >> executionWithoutDecoratingCommands [
 	aBuilder := self basicDecorator.
 	aCommand := self valuableCommand.
 	aBuilder execute: aCommand.
-	self assert: aCommand result equals: 42.
+	self assert: aCommand hasAnswer.
+	self assert: aCommand hasValue.
+	self assert: aCommand answer value equals: 42.
 	^ aCommand
 ]
 
@@ -129,7 +191,8 @@ GtExecutorDecoratorExamples >> oneDecoratingCommand [
 	"Check the command chain order"
 	aTempCommand := self valuableCommand.
 	aDecoratingCommand valuable value: aTempCommand.
-	self assert: aTempCommand result equals: 108.
+	self assert: aTempCommand hasAnswer.
+	self assert: aTempCommand answer value equals: 108.
 
 	"The second command in chain is the decorated command"
 	self assert: aDecoratingCommand command equals: aCommand.
@@ -168,9 +231,11 @@ GtExecutorDecoratorExamples >> twoDecoratingCommands [
 	"Check the command chain order"
 	aTempCommand := self valuableCommand.
 	aDecoratingCommand valuable value: aTempCommand.
-	self assert: aTempCommand result equals: 72.
+	self assert: aTempCommand hasAnswer.
+	self assert: aTempCommand answer value equals: 72.
 	aDecoratingCommand command valuable value: aTempCommand.
-	self assert: aTempCommand result equals: 108.
+	self assert: aTempCommand hasAnswer.
+	self assert: aTempCommand answer value equals: 108.
 
 	"The third command in chain is the decorated command"
 	self assert: aDecoratingCommand command command equals: aCommand.
@@ -185,6 +250,6 @@ GtExecutorDecoratorExamples >> valuableCommand [
 	aValuable := [ 42 ].
 	aCommand valuable: aValuable.
 	self assert: aCommand valuable equals: aValuable.
-	self assert: aCommand result isNil.
+	self assert: aCommand hasAnswer not.
 	^ aCommand
 ]

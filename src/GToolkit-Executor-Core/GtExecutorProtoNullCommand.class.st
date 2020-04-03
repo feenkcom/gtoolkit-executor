@@ -10,3 +10,8 @@ Class {
 GtExecutorProtoNullCommand class >> isAbstract [
 	^ self name = #GtExecutorProtoNullCommand 
 ]
+
+{ #category : #testing }
+GtExecutorProtoNullCommand >> hasAnswer [
+	^ false
+]

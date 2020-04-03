@@ -49,11 +49,11 @@ GtExecutorDecorator >> defaultCommands [
 
 { #category : #execution }
 GtExecutorDecorator >> execute: aCommand [
-	<return: #GtExecutorCommand>
+	<return: #GtExecutorAnswer>
 	| aDecoratedCommand |
 	aDecoratedCommand := self decorate: aCommand.
 	aDecoratedCommand execute.
-	^ aDecoratedCommand
+	^ aDecoratedCommand answer.
 ]
 
 { #category : #'gt-extension' }

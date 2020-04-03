@@ -1,8 +1,8 @@
 Class {
 	#name : #GtExecutorProtoCommand,
 	#superclass : #Object,
-	#traits : 'TGtAssert + TGtExecutorCommand',
-	#classTraits : 'TGtAssert classTrait + TGtExecutorCommand classTrait',
+	#traits : 'TGtAssert + (TGtExecutorProtoCommand - {#hasAnswer. #execute})',
+	#classTraits : 'TGtAssert classTrait + TGtExecutorProtoCommand classTrait',
 	#category : #'GToolkit-Executor-Core-Commands'
 }
 
@@ -15,4 +15,10 @@ GtExecutorProtoCommand class >> isAbstract [
 GtExecutorProtoCommand >> execute [
 	"Perform a command task"
 	self subclassResponsibility
+]
+
+{ #category : #testing }
+GtExecutorProtoCommand >> hasAnswer [
+	<return: #Boolean>
+	^ self subclassResponsibility
 ]
