@@ -30,6 +30,28 @@ GtExecutorDecoratorExamples >> answerOfTaskItCommand [
 ]
 
 { #category : #'*GToolkit-Executor-TaskIt' }
+GtExecutorDecoratorExamples >> answerOfTaskItCommand_SubscribeAfterExecution [
+	<gtExample>
+	| anAnswer theResults aSemaphore aTimeout |
+	theResults := OrderedCollection new.
+	aSemaphore := Semaphore new.
+	anAnswer := self answerOfTaskItCommand.
+	anAnswer 
+		whenSuccessDo: [ :anAnnouncement | 
+			theResults add: anAnnouncement. 
+			aSemaphore signal ];
+		whenFailureDo: [ :anAnnouncement | 
+			theResults add: anAnnouncement. 
+			aSemaphore signal ].
+	aTimeout := aSemaphore waitTimeoutSeconds: 10.
+	self 
+		assert: aTimeout not 
+		description: 'TaskIt process has not finshed on time'.
+	self assert: theResults size equals: 1.
+	^ anAnswer
+]
+
+{ #category : #'*GToolkit-Executor-TaskIt' }
 GtExecutorDecoratorExamples >> basicTaskItCommand [
 	<gtExample>
 	| aCommand |

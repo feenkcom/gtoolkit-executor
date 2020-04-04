@@ -66,8 +66,8 @@ GtExecutorTaskItAnswer >> whenFailureDo: aFailureBlock [
 
 { #category : #subscriptions }
 GtExecutorTaskItAnswer >> whenSuccessDo: aSuccessBlock [
-	self futureAdaptor onSuccessDo: [ :aResult | 
+	self futureAdaptor onSuccessDo: [ :aSubCommand | 
 		self announcer
 			whenSuccessDo: aSuccessBlock;
-			announceSuccessfullyFinished: aResult ].
+			announceSuccessfullyFinished: aSubCommand ].
 ]

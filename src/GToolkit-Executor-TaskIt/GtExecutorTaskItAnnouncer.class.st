@@ -18,8 +18,9 @@ GtExecutorTaskItAnnouncer >> announceFinishedWithFailure: anException [
 ]
 
 { #category : #announcing }
-GtExecutorTaskItAnnouncer >> announceSuccessfullyFinished: aResult [
+GtExecutorTaskItAnnouncer >> announceSuccessfullyFinished: aSubCommand [
 	self announcer announce: (GtExecutorTaskItSuccessfulAnnouncement new
+		subAnswer: aSubCommand answer;
 		answer: self answer)
 ]
 
