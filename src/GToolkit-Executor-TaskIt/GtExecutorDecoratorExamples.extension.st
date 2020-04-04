@@ -57,7 +57,7 @@ GtExecutorDecoratorExamples >> answerOfTaskItCommand_SubscribeAfterExecution [
 GtExecutorDecoratorExamples >> answerOfTaskItFailingPostExecutionSubCommand_ThreeSecondsLong [
 	<gtExample>
 	| aDecorator aCommand anAnswer |
-	aDecorator := self decoratorWithTaskItFailingPreExecutionSubCommand.
+	aDecorator := self decoratorWithTaskItFailingPostExecutionSubCommand.
 	aDecorator commands first valuable: [ :aSubCommand | 
 		3 seconds wait.
 		aSubCommand result: 108 / 0 ].
@@ -73,7 +73,7 @@ GtExecutorDecoratorExamples >> answerOfTaskItFailingPostExecutionSubCommand_Thre
 GtExecutorDecoratorExamples >> answerOfTaskItFailingPreExecutionSubCommand_ThreeSecondsLong [
 	<gtExample>
 	| aDecorator aCommand anAnswer |
-	aDecorator := self decoratorWithErroneousPreExecutionCommand.
+	aDecorator := self decoratorWithTaskItFailingPreExecutionSubCommand.
 	aDecorator commands first valuable: [ :aSubCommand | 
 		3 seconds wait.
 		aSubCommand valuable: [ 108 / 0 ] ].
