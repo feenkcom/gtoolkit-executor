@@ -5,7 +5,7 @@ TGtExecutorAnswer >> gtCommandsFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Answers';
-		priority: 2;
+		priority: 5;
 		object: [ self command ];
 		view: #gtCommandsFor:;
 		send: #answer
