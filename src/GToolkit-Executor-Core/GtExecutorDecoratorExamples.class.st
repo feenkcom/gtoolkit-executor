@@ -306,7 +306,7 @@ GtExecutorDecoratorExamples >> executingValuableCommandWithBasicSkippingHandler_
 	aHandler := self basicSkippingHandler.
 	aCommand := self valuableCommand.
 	aContext := self executionErrorContext.
-	aNextContext := aHandler execute: aCommand previousContext: aContext.
+	aNextContext := aHandler execute: aCommand inContext: aContext.
 	self assert: aNextContext class equals: GtExecutorExecutionSkipContext.
 	^ aNextContext
 ]

@@ -9,14 +9,14 @@ Class {
 { #category : #execution }
 GtExecutorExceptionProtoHandler >> execute: aCommand [
 	<return: #GtExecutorExecutionContext>
-	^ self execute: aCommand previousContext: GtExecutorExecutionContext start
+	^ self execute: aCommand inContext: GtExecutorExecutionContext start
 ]
 
 { #category : #execution }
-GtExecutorExceptionProtoHandler >> execute: aCommand previousContext: aPreviousContext [
+GtExecutorExceptionProtoHandler >> execute: aCommand inContext: aContext [
 	<return: #GtExecutorExecutionContext>
-	aPreviousContext handler: self.
-	^ aCommand executeInContext: aPreviousContext.
+	aContext handler: self.
+	^ aCommand executeInContext: aContext.
 ]
 
 { #category : #'execution - double dispatch' }
