@@ -36,7 +36,7 @@ GtExecutorTaskItAnnouncers >> defaultAnswer [
 
 { #category : #defaults }
 GtExecutorTaskItAnnouncers >> defaultCollection [
-	^ OrderedCollection new: 2
+	^ OrderedCollection new: 1
 ]
 
 { #category : #initialization }

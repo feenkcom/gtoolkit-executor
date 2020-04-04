@@ -65,3 +65,15 @@ TGtExecutorAnswer >> hasDescription [
 		ifPresent: [ :aString | true ] 
 		ifAbsent: [ false ]
 ]
+
+{ #category : #testing }
+TGtExecutorAnswer >> isFailure [
+	<return: #Boolean>
+	^ self isSuccess not
+]
+
+{ #category : #testing }
+TGtExecutorAnswer >> isSuccess [
+	<return: #Boolean>
+	^ self explicitRequirement
+]

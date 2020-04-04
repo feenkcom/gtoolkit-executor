@@ -8,3 +8,8 @@ Class {
 GtExecutorSuccessfulAnswer class >> isAbstract [ 
 	^ self name = #GtExecutorSuccessfulAnswer 
 ]
+
+{ #category : #testing }
+GtExecutorSuccessfulAnswer >> isSuccess [
+	^ true
+]

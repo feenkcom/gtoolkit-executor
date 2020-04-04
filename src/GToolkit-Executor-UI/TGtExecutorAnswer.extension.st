@@ -7,7 +7,8 @@ TGtExecutorAnswer >> gtCommandsFor: aView [
 		title: 'Answers';
 		priority: 2;
 		object: [ self command ];
-		view: #gtCommandsFor:
+		view: #gtCommandsFor:;
+		send: #answer
 ]
 
 { #category : #'*GToolkit-Executor-UI' }

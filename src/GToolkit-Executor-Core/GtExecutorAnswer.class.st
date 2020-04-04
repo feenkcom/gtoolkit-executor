@@ -45,3 +45,9 @@ GtExecutorAnswer class >> value: anObject [
 GtExecutorAnswer >> isAnswer [
 	^ true
 ]
+
+{ #category : #testing }
+GtExecutorAnswer >> isSuccess [
+	<return: #Boolean>
+	^ self subclassResponsibility
+]
