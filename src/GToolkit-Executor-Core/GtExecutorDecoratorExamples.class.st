@@ -130,6 +130,17 @@ GtExecutorDecoratorExamples >> basicPostExecutionCommand [
 	^ aCommand
 ]
 
+{ #category : #'examples - commands' }
+GtExecutorDecoratorExamples >> basicPreExecutionCommand [
+	<gtExample>
+	| aCommand |
+	aCommand := GtExecutorPreExecutionCommand new.
+	self assert: aCommand command equals: GtExecutorCommand null.
+	self assert: aCommand valuable isNotNil.
+	self assert: aCommand hasAnswer not.
+	^ aCommand
+]
+
 { #category : #'examples - exception handlers' }
 GtExecutorDecoratorExamples >> basicSkippingHandler [
 	<gtExample>
@@ -155,6 +166,18 @@ GtExecutorDecoratorExamples >> decoratorWithErroneousPostExecutionCommand [
 	| aDecorator aCommand |
 	aDecorator := self basicDecorator.
 	aCommand := self erroneousPostExecutionCommand.
+	aDecorator command: aCommand.
+	self assert: aDecorator commands size equals: 1.
+	self assert: aDecorator commands first equals: aCommand.
+	^ aDecorator
+]
+
+{ #category : #'examples - decorator' }
+GtExecutorDecoratorExamples >> decoratorWithErroneousPreExecutionCommand [
+	<gtExample>
+	| aDecorator aCommand |
+	aDecorator := self basicDecorator.
+	aCommand := self erroneousPreExecutionCommand.
 	aDecorator command: aCommand.
 	self assert: aDecorator commands size equals: 1.
 	self assert: aDecorator commands first equals: aCommand.
@@ -213,6 +236,17 @@ GtExecutorDecoratorExamples >> erroneousPostExecutionCommand [
 	| aCommand aValuable |
 	aCommand := self basicPostExecutionCommand.
 	aValuable := [ :aSubCommand | aSubCommand result: 108 / 0 ].
+	aCommand valuable: aValuable.
+	self assert: aCommand valuable equals: aValuable.
+	^ aCommand
+]
+
+{ #category : #'examples - commands' }
+GtExecutorDecoratorExamples >> erroneousPreExecutionCommand [
+	<gtExample>
+	| aCommand aValuable |
+	aCommand := self basicPreExecutionCommand.
+	aValuable := [ :aSubCommand | aSubCommand valuable: [ 108 / 0 ] ].
 	aCommand valuable: aValuable.
 	self assert: aCommand valuable equals: aValuable.
 	^ aCommand
@@ -398,6 +432,17 @@ GtExecutorDecoratorExamples >> postExecutionCommand [
 	| aCommand aValuable |
 	aCommand := self basicPostExecutionCommand.
 	aValuable := [ :aSubCommand | aSubCommand result: 108 ].
+	aCommand valuable: aValuable.
+	self assert: aCommand valuable equals: aValuable.
+	^ aCommand
+]
+
+{ #category : #'examples - commands' }
+GtExecutorDecoratorExamples >> preExecutionCommand [
+	<gtExample>
+	| aCommand aValuable |
+	aCommand := self basicPreExecutionCommand.
+	aValuable := [ :aSubCommand | aSubCommand valuable: [ 108 ] ].
 	aCommand valuable: aValuable.
 	self assert: aCommand valuable equals: aValuable.
 	^ aCommand

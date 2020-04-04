@@ -54,12 +54,44 @@ GtExecutorDecoratorExamples >> answerOfTaskItCommand_SubscribeAfterExecution [
 ]
 
 { #category : #'*GToolkit-Executor-TaskIt' }
+GtExecutorDecoratorExamples >> answerOfTaskItFailingPostExecutionSubCommand_ThreeSecondsLong [
+	<gtExample>
+	| aDecorator aCommand anAnswer |
+	aDecorator := self decoratorWithTaskItFailingPreExecutionSubCommand.
+	aDecorator commands first valuable: [ :aSubCommand | 
+		3 seconds wait.
+		aSubCommand result: 108 / 0 ].
+	aCommand := self valuableCommand.
+	anAnswer := aDecorator execute: aCommand.
+	self
+		assert: anAnswer class
+		equals: GtExecutorTaskItAnswer.
+	^ anAnswer
+]
+
+{ #category : #'*GToolkit-Executor-TaskIt' }
+GtExecutorDecoratorExamples >> answerOfTaskItFailingPreExecutionSubCommand_ThreeSecondsLong [
+	<gtExample>
+	| aDecorator aCommand anAnswer |
+	aDecorator := self decoratorWithErroneousPreExecutionCommand.
+	aDecorator commands first valuable: [ :aSubCommand | 
+		3 seconds wait.
+		aSubCommand valuable: [ 108 / 0 ] ].
+	aCommand := self valuableCommand.
+	anAnswer := aDecorator execute: aCommand.
+	self
+		assert: anAnswer class
+		equals: GtExecutorTaskItAnswer.
+	^ anAnswer
+]
+
+{ #category : #'*GToolkit-Executor-TaskIt' }
 GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand [
 	<gtExample>
 	| aDecorator aCommand anAnswer theResults aSemaphore |
 	theResults := OrderedCollection new.
 	aSemaphore := Semaphore new.
-	aDecorator := self decoratorWithTaskItFailingSubCommand.
+	aDecorator := self decoratorWithTaskItFailingPostExecutionSubCommand.
 	aDecorator commands first valuable: [ :aSubCommand | 
 		theResults add: ZeroDivide.
 		aSubCommand result: 108 / 0 ].
@@ -111,28 +143,12 @@ GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand_SubscribeAfterExe
 ]
 
 { #category : #'*GToolkit-Executor-TaskIt' }
-GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand_ThreeSecondsLong [
-	<gtExample>
-	| aDecorator aCommand anAnswer |
-	aDecorator := self decoratorWithTaskItFailingSubCommand.
-	aDecorator commands first valuable: [ :aSubCommand | 
-		3 seconds wait.
-		aSubCommand result: 108 / 0 ].
-	aCommand := self valuableCommand.
-	anAnswer := aDecorator execute: aCommand.
-	self
-		assert: anAnswer class
-		equals: GtExecutorTaskItAnswer.
-	^ anAnswer
-]
-
-{ #category : #'*GToolkit-Executor-TaskIt' }
 GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand_WhenDo_FailureAnnouncement [
 	<gtExample>
 	| aDecorator aCommand anAnswer theResults aSemaphore aSubscriptionAdaptor |
 	theResults := OrderedCollection new.
 	aSemaphore := Semaphore new.
-	aDecorator := self decoratorWithTaskItFailingSubCommand.
+	aDecorator := self decoratorWithTaskItFailingPostExecutionSubCommand.
 	aDecorator exceptionHandler: self basicPassingExceptionHandler.
 	aCommand := self valuableCommand.
 	anAnswer := aDecorator execute: aCommand.
@@ -205,7 +221,7 @@ GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand_WhenDo_TaskItAnno
 	| aDecorator aCommand anAnswer theResults aSemaphore aSubscriptionAdaptor |
 	theResults := OrderedCollection new.
 	aSemaphore := Semaphore new.
-	aDecorator := self decoratorWithTaskItFailingSubCommand.
+	aDecorator := self decoratorWithTaskItFailingPostExecutionSubCommand.
 	aDecorator exceptionHandler: self basicPassingExceptionHandler.
 	aCommand := self valuableCommand.
 	anAnswer := aDecorator execute: aCommand.
@@ -277,10 +293,22 @@ GtExecutorDecoratorExamples >> decoratorWithTaskItCommand [
 ]
 
 { #category : #'*GToolkit-Executor-TaskIt' }
-GtExecutorDecoratorExamples >> decoratorWithTaskItFailingSubCommand [
+GtExecutorDecoratorExamples >> decoratorWithTaskItFailingPostExecutionSubCommand [
 	<gtExample>
 	| aDecorator aCommand |
 	aDecorator := self decoratorWithErroneousPostExecutionCommand.
+	aCommand := self basicTaskItCommand.
+	aDecorator command: aCommand.
+	self assert: aDecorator commands size equals: 2.
+	self assert: aDecorator commands second equals: aCommand.
+	^ aDecorator
+]
+
+{ #category : #'*GToolkit-Executor-TaskIt' }
+GtExecutorDecoratorExamples >> decoratorWithTaskItFailingPreExecutionSubCommand [
+	<gtExample>
+	| aDecorator aCommand |
+	aDecorator := self decoratorWithErroneousPreExecutionCommand.
 	aCommand := self basicTaskItCommand.
 	aDecorator command: aCommand.
 	self assert: aDecorator commands size equals: 2.
@@ -303,7 +331,7 @@ GtExecutorDecoratorExamples >> executionWithTaskItCommand [
 GtExecutorDecoratorExamples >> executionWithTaskItFailingSubCommand [
 	<gtExample>
 	| aBuilder aCommand |
-	aBuilder := self decoratorWithTaskItFailingSubCommand.
+	aBuilder := self decoratorWithTaskItFailingPostExecutionSubCommand.
 	aCommand := self valuableCommand.
 	aBuilder execute: aCommand.
 	self assert: aCommand hasAnswer not.
