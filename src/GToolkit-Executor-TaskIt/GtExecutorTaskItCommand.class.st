@@ -47,10 +47,11 @@ GtExecutorTaskItCommand >> executeSubCommandInSameProcess [
 { #category : #'private - execution' }
 GtExecutorTaskItCommand >> newFuture [
 	<return: #TKTFuture>
-	self flag: 'asBlTktCommand should be used'.
-	^ self pool future: [ 
-			self command executeInContext: self subCommandExecutionContext.
-			self command ]
+	| aCommand |
+	aCommand := GtExecutorTaskItSubCommand new 
+		command: self command;
+		context: self subCommandExecutionContext.
+	^ self pool future: aCommand
 ]
 
 { #category : #accessing }
