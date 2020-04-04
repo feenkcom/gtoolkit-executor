@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #executing }
-GtExecutorExecutionSkipContext >> execute: aCommand using: aGtExecutorExceptionHandler [
+GtExecutorExecutionSkipContext >> execute: aCommand [
 	<return: #GtExecutorExecutionContext>
-	^ aGtExecutorExceptionHandler skip: aCommand
+	^ self handler skip: aCommand
 ]

@@ -22,7 +22,7 @@ GtExecutorExecutionExceptionContext >> exception: anException [
 ]
 
 { #category : #executing }
-GtExecutorExecutionExceptionContext >> execute: aCommand using: aGtExecutorExceptionHandler [
+GtExecutorExecutionExceptionContext >> execute: aCommand [
 	<return: #GtExecutorExecutionContext>
-	^ aGtExecutorExceptionHandler skip: aCommand
+	^ self handler skip: aCommand
 ]

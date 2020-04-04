@@ -2,14 +2,15 @@ Class {
 	#name : #GtExecutorTaskItCommand,
 	#superclass : #GtExecutorDecoratingCommand,
 	#instVars : [
-		'pool',
-		'onSuccess',
-		'onFailure',
-		'future',
-		'answer'
+		'pool'
 	],
 	#category : #'GToolkit-Executor-TaskIt-Commands'
 }
+
+{ #category : #accessing }
+GtExecutorTaskItCommand class >> subCommandExecutionContextOptionName [
+	^ #subCommandExecutionContext
+]
 
 { #category : #asserting }
 GtExecutorTaskItCommand >> assertCallback: aCallback [
@@ -21,69 +22,40 @@ GtExecutorTaskItCommand >> assertCallback: aCallback [
 		description: [ 'Callback must have one argument' ].
 ]
 
-{ #category : #defaults }
-GtExecutorTaskItCommand >> defaultCallbackCollection [
-	^ OrderedCollection new: 2
-]
-
-{ #category : #defaults }
-GtExecutorTaskItCommand >> defaultFuture [
-	^ GtExecutorTaskItFuture null
-]
-
-{ #category : #defaults }
-GtExecutorTaskItCommand >> defaultOnFailure [
-	^ self defaultCallbackCollection
-]
-
-{ #category : #defaults }
-GtExecutorTaskItCommand >> defaultOnSuccess [
-	^ self defaultCallbackCollection
+{ #category : #execution }
+GtExecutorTaskItCommand >> execute [
+	BlUseAsyncFeatures
+		ifEnabledDo: [ self executeSubCommandInPool ]
+		otherwise: [ self executeSubCommandInSameProcess ]
 ]
 
 { #category : #execution }
-GtExecutorTaskItCommand >> execute [
-	future := GtExecutorTaskItFuture new future: (
-		self pool
-			future: [ self command execute. self command ]).
-	self subscribeFutureCallbacks.
-	self answer: (GtExecutorTaskItAnswer new future: self future)
+GtExecutorTaskItCommand >> executeInContext: aGtExecutorExecutionContext [
+	<return: #GtExecutorExecutionContext>
+	self subCommandExecutionContext: aGtExecutorExecutionContext.
+	^ super executeInContext: aGtExecutorExecutionContext
 ]
 
-{ #category : #accessing }
-GtExecutorTaskItCommand >> future [
-	<return: #GtExecutorTaskItFuture>
-	^ future
+{ #category : #'private - execution' }
+GtExecutorTaskItCommand >> executeSubCommandInPool [
+	| aFutureAdaptor |
+	aFutureAdaptor := GtExecutorTaskItFutureAdaptor new.
+	self answer: (GtExecutorAnswer taskIt: aFutureAdaptor).
+	aFutureAdaptor future: self newFuture
 ]
 
-{ #category : #initialization }
-GtExecutorTaskItCommand >> initialize [
-	super initialize.
-	onFailure := self defaultOnFailure.
-	onSuccess := self defaultOnSuccess.
-	future := self defaultFuture.
+{ #category : #'private - execution' }
+GtExecutorTaskItCommand >> executeSubCommandInSameProcess [
+	self executeSubCommand.
+	self answer: (GtExecutorAnswer noValue: 'Successfully executed in same process').
 ]
 
-{ #category : #accessing }
-GtExecutorTaskItCommand >> onFailure [
-	^ onFailure
-]
-
-{ #category : #accessing }
-GtExecutorTaskItCommand >> onFailureDo: aCallback [
-	self assertCallback: aCallback.
-	onFailure add: aCallback
-]
-
-{ #category : #accessing }
-GtExecutorTaskItCommand >> onSuccess [
-	^ onSuccess
-]
-
-{ #category : #accessing }
-GtExecutorTaskItCommand >> onSuccessDo: aCallback [
-	self assertCallback: aCallback.
-	onSuccess add: aCallback
+{ #category : #'private - execution' }
+GtExecutorTaskItCommand >> newFuture [
+	<return: #TKTFuture>
+	^ self pool future: [ 
+			self command executeInContext: self subCommandExecutionContext.
+			self command ]
 ]
 
 { #category : #accessing }
@@ -99,10 +71,23 @@ GtExecutorTaskItCommand >> pool: aBlTktCommonQueueWorkerPool [
 	pool := aBlTktCommonQueueWorkerPool
 ]
 
-{ #category : #'private - subscriptions' }
-GtExecutorTaskItCommand >> subscribeFutureCallbacks [
-	self onSuccess
-		do: [ :eachCallback | self future onSuccessDo: eachCallback ].
-	self onSuccess
-		do: [ :eachCallback | self future onFailureDo: eachCallback ]
+{ #category : #printing }
+GtExecutorTaskItCommand >> printOn: aStream [
+	aStream nextPutAll: 'TaskIt execution'
+]
+
+{ #category : #'private - accessing' }
+GtExecutorTaskItCommand >> subCommandExecutionContext [
+	<return: #GtExecutorExecutionContext>
+	^ self 
+		optionAt: self class subCommandExecutionContextOptionName 
+		ifAbsent: [ GtExecutorExecutionContext null ]
+]
+
+{ #category : #'private - accessing' }
+GtExecutorTaskItCommand >> subCommandExecutionContext: aGtExecutorExecutionContext [
+	self assertOptionDoesNotExist: self class subCommandExecutionContextOptionName.
+	self 
+		optionAt: self class subCommandExecutionContextOptionName 
+		put: aGtExecutorExecutionContext
 ]

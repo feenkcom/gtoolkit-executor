@@ -34,6 +34,12 @@ TGtExecutorCommand >> answer: aGtExecutorAnswer [
 		put: aGtExecutorAnswer
 ]
 
+{ #category : #execution }
+TGtExecutorCommand >> executeInContext: aGtExecutorExecutionContext [
+	<return: #GtExecutorExecutionContext>
+	^ aGtExecutorExecutionContext execute: self.
+]
+
 { #category : #'testing - answer' }
 TGtExecutorCommand >> hasAnswer [
 	<return: #Boolean>

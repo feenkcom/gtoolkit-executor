@@ -1,6 +1,9 @@
 Class {
 	#name : #GtExecutorExecutionContext,
 	#superclass : #GtExecutorExecutionProtoContext,
+	#instVars : [
+		'handler'
+	],
 	#category : #'GToolkit-Executor-Core-Exception Handlers'
 }
 
@@ -20,11 +23,41 @@ GtExecutorExecutionContext class >> isAbstract [
 ]
 
 { #category : #factory }
+GtExecutorExecutionContext class >> null [
+	^ GtExecutorExecutionNullContext default
+]
+
+{ #category : #factory }
 GtExecutorExecutionContext class >> skip [
 	^ GtExecutorExecutionSkipContext new
 ]
 
 { #category : #factory }
 GtExecutorExecutionContext class >> start [ 
-	^ GtExecutorExecutionStartContext default 
+	^ GtExecutorExecutionStartContext new 
+]
+
+{ #category : #defaults }
+GtExecutorExecutionContext >> defaultHandler [
+	^ GtExecutorExceptionHandler null
+]
+
+{ #category : #accessing }
+GtExecutorExecutionContext >> handler [
+	<return: #GtExecutorExceptionHandler>
+	^ handler
+]
+
+{ #category : #accessing }
+GtExecutorExecutionContext >> handler: aGtExecutorExceptionHandler [
+	self 
+		assert: [ aGtExecutorExceptionHandler isNotNil ] 
+		description: [ 'Execution exception handler must be non-nil'  ].
+	handler := aGtExecutorExceptionHandler
+]
+
+{ #category : #initialization }
+GtExecutorExecutionContext >> initialize [
+	super initialize.
+	handler := self defaultHandler.
 ]

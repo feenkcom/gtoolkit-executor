@@ -7,7 +7,7 @@ Class {
 }
 
 { #category : #executing }
-GtExecutorExecutionProtoContext >> execute: aCommand using: aGtExecutorExceptionHandler [
+GtExecutorExecutionProtoContext >> execute: aCommand [
 	<return: #GtExecutorExecutionContext>
 	^ self subclassResponsibility
 ]

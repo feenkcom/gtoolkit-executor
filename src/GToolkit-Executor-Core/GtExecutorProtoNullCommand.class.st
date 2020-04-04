@@ -16,6 +16,12 @@ GtExecutorProtoNullCommand >> answer [
 	^ GtExecutorAnswer null
 ]
 
+{ #category : #execution }
+GtExecutorProtoNullCommand >> executeInContext: aGtExecutorExecutionContext [
+	<return: #GtExecutorExecutionContext>
+	^ GtExecutorExecutionContext skip
+]
+
 { #category : #testing }
 GtExecutorProtoNullCommand >> hasAnswer [
 	^ false

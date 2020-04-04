@@ -23,6 +23,12 @@ GtExecutorProtoCommand >> execute [
 	self subclassResponsibility
 ]
 
+{ #category : #execution }
+GtExecutorProtoCommand >> executeInContext: aGtExecutorExecutionContext [
+	<return: #GtExecutorExecutionContext>
+	^ self subclassResponsibility
+]
+
 { #category : #testing }
 GtExecutorProtoCommand >> hasAnswer [
 	<return: #Boolean>

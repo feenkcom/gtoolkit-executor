@@ -15,6 +15,11 @@ GtExecutorExceptionHandler class >> isAbstract [
 ]
 
 { #category : #factory }
+GtExecutorExceptionHandler class >> null [
+	^ GtExecutorExceptionNullHandler
+]
+
+{ #category : #factory }
 GtExecutorExceptionHandler class >> skipping [
 	^ GtExecutorExceptionSkippingHandler new
 ]

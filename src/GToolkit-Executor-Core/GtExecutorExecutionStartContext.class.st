@@ -1,10 +1,14 @@
 Class {
 	#name : #GtExecutorExecutionStartContext,
-	#superclass : #GtExecutorExecutionProtoContext,
-	#traits : 'TGtUniqueInstance',
-	#classTraits : 'TGtUniqueInstance classTrait',
+	#superclass : #GtExecutorExecutionContext,
 	#category : #'GToolkit-Executor-Core-Exception Handlers'
 }
+
+{ #category : #executing }
+GtExecutorExecutionStartContext >> execute: aCommand [ 
+	<return: #GtExecutorExecutionContext>
+	^ self handler run: aCommand
+]
 
 { #category : #executing }
 GtExecutorExecutionStartContext >> execute: aCommand using: aGtExecutorExceptionHandler [

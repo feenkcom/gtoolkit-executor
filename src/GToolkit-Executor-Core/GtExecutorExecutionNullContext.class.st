@@ -1,13 +1,13 @@
 Class {
-	#name : #GtExecutorExecutionContinueContext,
-	#superclass : #GtExecutorExecutionContext,
+	#name : #GtExecutorExecutionNullContext,
+	#superclass : #GtExecutorExecutionProtoContext,
 	#traits : 'TGtUniqueInstance',
 	#classTraits : 'TGtUniqueInstance classTrait',
 	#category : #'GToolkit-Executor-Core-Exception Handlers'
 }
 
 { #category : #executing }
-GtExecutorExecutionContinueContext >> execute: aCommand [
+GtExecutorExecutionNullContext >> execute: aCommand [
 	<return: #GtExecutorExecutionContext>
-	^ self handler run: aCommand
+	^ GtExecutorExceptionHandler null skip: aCommand 
 ]

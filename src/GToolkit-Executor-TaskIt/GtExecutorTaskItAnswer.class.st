@@ -2,41 +2,72 @@ Class {
 	#name : #GtExecutorTaskItAnswer,
 	#superclass : #GtExecutorSuccessfulAnswerWithoutValue,
 	#instVars : [
-		'future'
+		'futureAdaptor',
+		'announcers'
 	],
 	#category : #'GToolkit-Executor-TaskIt-Answers'
 }
 
+{ #category : #accessing }
+GtExecutorTaskItAnswer class >> announcersOptionName [
+	^ #announcers
+]
+
+{ #category : #'private - convenient' }
+GtExecutorTaskItAnswer >> announcer [
+	<return: #GtExecutorTaskItAnnouncer>
+	^ self announcers newAnnouncer
+]
+
+{ #category : #accessing }
+GtExecutorTaskItAnswer >> announcers [
+	<return: #GtExecutorTaskItAnnouncers>
+	^ announcers
+]
+
 { #category : #defaults }
-GtExecutorTaskItAnswer >> defaultFuture [
-	^ GtExecutorTaskItFuture null
+GtExecutorTaskItAnswer >> defaultAnnouncers [
+	^ GtExecutorTaskItAnnouncers new answer: self.
+]
+
+{ #category : #defaults }
+GtExecutorTaskItAnswer >> defaultFutureAdaptor [
+	^ GtExecutorTaskItFutureAdaptor null
 ]
 
 { #category : #accessing }
-GtExecutorTaskItAnswer >> future [
-	<return: #GtExecutorTaskItFuture>
-	^ future
+GtExecutorTaskItAnswer >> futureAdaptor [
+	<return: #GtExecutorTaskItFutureAdaptor>
+	^ futureAdaptor
 ]
 
 { #category : #accessing }
-GtExecutorTaskItAnswer >> future: aTKTFuture [
+GtExecutorTaskItAnswer >> futureAdaptor: aGtExecutorTaskItFutureAdaptor [
 	self 
-		assert: [ aTKTFuture isNotNil ] 
-		description: [ 'TaskIt Future must be non-nil' ].
-	future := aTKTFuture.
-	self subscribeFutureCallbacks.
+		assert: [ aGtExecutorTaskItFutureAdaptor isNotNil ] 
+		description: [ 'TaskIt Future adaptor must be non-nil' ].
+	futureAdaptor := aGtExecutorTaskItFutureAdaptor.
 ]
 
 { #category : #initialization }
 GtExecutorTaskItAnswer >> initialize [
 	super initialize.
-	future := self defaultFuture.
+	futureAdaptor := self defaultFutureAdaptor.
+	announcers := self defaultAnnouncers.
 ]
 
-{ #category : #'private - subscriptions' }
-GtExecutorTaskItAnswer >> subscribeFutureCallbacks [
-	self onPrivateSuccessDo: [ :aSubCommand | 
-		self answerFromCommand: aSubCommand ].
-	self onPrivateFailureDo: [ :anException | 
-		self answerFromException: anException ].
+{ #category : #subscriptions }
+GtExecutorTaskItAnswer >> whenFailureDo: aFailureBlock [
+	self futureAdaptor onFailureDo: [ :anException | 
+		self announcer
+			whenFailureDo: aFailureBlock;
+			announceFinishedWithFailure: anException ].
+]
+
+{ #category : #subscriptions }
+GtExecutorTaskItAnswer >> whenSuccessDo: aSuccessBlock [
+	self futureAdaptor onSuccessDo: [ :aResult | 
+		self announcer
+			whenSuccessDo: aSuccessBlock;
+			announceSuccessfullyFinished: aResult ].
 ]
