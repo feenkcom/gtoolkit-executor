@@ -38,10 +38,16 @@ GtExecutorTaskItCommand >> executeInContext: aGtExecutorExecutionContext [
 
 { #category : #'private - execution' }
 GtExecutorTaskItCommand >> executeSubCommandInPool [
-	| aFutureAdaptor |
+	| aFutureAdaptor aFuture |
 	aFutureAdaptor := GtExecutorTaskItFutureAdaptor new.
 	self answer: (GtExecutorAnswer taskIt: aFutureAdaptor).
-	aFutureAdaptor future: self newFuture
+	aFuture := self newFuture.
+	aFutureAdaptor future: aFuture.
+	aFuture onFailureDo: [ :anException | 
+		| anExceptionAnswer |
+		anExceptionAnswer := GtExecutorAnswer exception: anException.
+		anExceptionAnswer description: 'Exception handled by TaskIt'.
+		self command answer: anExceptionAnswer ].
 ]
 
 { #category : #'private - execution' }

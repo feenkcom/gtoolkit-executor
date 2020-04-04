@@ -60,16 +60,23 @@ GtExecutorTaskItAnnouncer >> initialize [
 	answer := self defaultAnswer.
 ]
 
+{ #category : #'announcer - subscription' }
+GtExecutorTaskItAnnouncer >> unsubscribe: aSubscriber [
+	self announcer unsubscribe: aSubscriber
+]
+
 { #category : #subscriptions }
 GtExecutorTaskItAnnouncer >> whenFailureDo: aBlock [
-	self announcer 
+	<return: #AnnouncementSubscription>
+	^ self announcer 
 		when: GtExecutorTaskItFailureAnnouncement 
 		do: aBlock
 ]
 
 { #category : #subscriptions }
 GtExecutorTaskItAnnouncer >> whenSuccessDo: aBlock [
-	self announcer 
+	<return: #AnnouncementSubscription>
+	^ self announcer 
 		when: GtExecutorTaskItSuccessfulAnnouncement 
 		do: aBlock
 ]

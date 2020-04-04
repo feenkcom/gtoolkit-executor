@@ -20,6 +20,11 @@ GtExecutorExceptionHandler class >> null [
 ]
 
 { #category : #factory }
+GtExecutorExceptionHandler class >> passing [
+	^ GtExecutorExceptionPassingHandler new
+]
+
+{ #category : #factory }
 GtExecutorExceptionHandler class >> skipping [
 	^ GtExecutorExceptionSkippingHandler new
 ]

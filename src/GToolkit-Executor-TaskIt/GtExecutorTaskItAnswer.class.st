@@ -46,6 +46,9 @@ GtExecutorTaskItAnswer >> futureAdaptor: aGtExecutorTaskItFutureAdaptor [
 	self 
 		assert: [ aGtExecutorTaskItFutureAdaptor isNotNil ] 
 		description: [ 'TaskIt Future adaptor must be non-nil' ].
+	self 
+		assert: [ aGtExecutorTaskItFutureAdaptor isFuture ] 
+		description: [ 'TaskIt Future adaptor must be a real adaptor' ].
 	futureAdaptor := aGtExecutorTaskItFutureAdaptor.
 ]
 
@@ -57,17 +60,48 @@ GtExecutorTaskItAnswer >> initialize [
 ]
 
 { #category : #subscriptions }
+GtExecutorTaskItAnswer >> unsubscribe: aSubscriber [
+	self announcer unsubscribe: aSubscriber
+]
+
+{ #category : #subscriptions }
+GtExecutorTaskItAnswer >> when: anAnnouncement do: aBlock [
+	<return: #GtExecutorAnnouncementSubscriptionsAdaptor>
+	"I recomend you do specific subscriptions 
+	since more generic may iterate over too many announcement class collection"
+	| anAdaptor |
+	anAdaptor := GtExecutorAnnouncementSubscriptionsAdaptor new.
+	(anAnnouncement instanceSide withAllSubclasses includes: GtExecutorTaskItFailureAnnouncement) 
+		ifTrue: [ anAdaptor adaptor: (self whenFailureDo: aBlock) ].
+	(anAnnouncement instanceSide withAllSubclasses includes: GtExecutorTaskItSuccessfulAnnouncement) 
+		ifTrue: [ anAdaptor adaptor: (self whenSuccessDo: aBlock) ].
+	^ anAdaptor
+]
+
+{ #category : #subscriptions }
 GtExecutorTaskItAnswer >> whenFailureDo: aFailureBlock [
+	<return: #GtExecutorAnnouncementSubscriptionAdaptor>
+	| anAdaptor |
+	anAdaptor := GtExecutorAnnouncementSubscriptionAdaptor new.
 	self futureAdaptor onFailureDo: [ :anException | 
-		self announcer
-			whenFailureDo: aFailureBlock;
-			announceFinishedWithFailure: anException ].
+		| anAnnouncer aSubscription |
+		anAnnouncer := self announcer.
+		aSubscription := anAnnouncer whenFailureDo: aFailureBlock.
+		anAdaptor subscription: aSubscription.
+		anAnnouncer announceFinishedWithFailure: anException ].
+	^ anAdaptor
 ]
 
 { #category : #subscriptions }
 GtExecutorTaskItAnswer >> whenSuccessDo: aSuccessBlock [
+	<return: #GtExecutorAnnouncementSubscriptionAdaptor>
+	| anAdaptor |
+	anAdaptor := GtExecutorAnnouncementSubscriptionAdaptor new.
 	self futureAdaptor onSuccessDo: [ :aSubCommand | 
-		self announcer
-			whenSuccessDo: aSuccessBlock;
-			announceSuccessfullyFinished: aSubCommand ].
+		| anAnnouncer aSubscription |
+		anAnnouncer := self announcer.
+		aSubscription := anAnnouncer whenSuccessDo: aSuccessBlock.
+		anAdaptor subscription: aSubscription.
+		anAnnouncer announceSuccessfullyFinished: aSubCommand ].
+	^ anAdaptor
 ]

@@ -55,3 +55,9 @@ GtExecutorTaskItAnnouncers >> newAnnouncer [
 	self collection add: anAnnouncer.
 	^ anAnnouncer
 ]
+
+{ #category : #subscriptions }
+GtExecutorTaskItAnnouncers >> unsubscribe: aSubscriber [
+	self collection do: [ :eachAnnouncer | 
+		eachAnnouncer unsubscribe: aSubscriber ]
+]

@@ -3,12 +3,12 @@ Extension { #name : #GtExecutorDecoratorExamples }
 { #category : #'*GToolkit-Executor-TaskIt' }
 GtExecutorDecoratorExamples >> answerOfTaskItCommand [
 	<gtExample>
-	| aBuilder aCommand anAnswer theResults aSemaphore aTimeout |
+	| aDecorator aCommand anAnswer theResults aSemaphore |
 	theResults := OrderedCollection new.
 	aSemaphore := Semaphore new.
-	aBuilder := self decoratorWithTaskItCommand.
+	aDecorator := self decoratorWithTaskItCommand.
 	aCommand := self valuableCommand.
-	anAnswer := aBuilder execute: aCommand.
+	anAnswer := aDecorator execute: aCommand.
 	self
 		assert: anAnswer class
 		equals: GtExecutorTaskItAnswer.
@@ -19,10 +19,7 @@ GtExecutorDecoratorExamples >> answerOfTaskItCommand [
 		whenFailureDo: [ :anAnnouncement | 
 			theResults add: anAnnouncement. 
 			aSemaphore signal ].
-	aTimeout := aSemaphore waitTimeoutSeconds: 10.
-	self 
-		assert: aTimeout not 
-		description: 'TaskIt process has not finshed on time'.
+	self assertSemaphoreTimeout: aSemaphore.
 	self assert: theResults size equals: 1.
 	self assert: theResults first class equals: GtExecutorTaskItSuccessfulAnnouncement.
 	self assert: theResults first answer equals: anAnswer.
@@ -50,7 +47,7 @@ GtExecutorDecoratorExamples >> answerOfTaskItCommand_SubscribeAfterExecution [
 	aTimeout := aSemaphore waitTimeoutSeconds: 10.
 	self 
 		assert: aTimeout not 
-		description: 'TaskIt process has not finshed on time'.
+		description: 'TaskIt process has not finished on time'.
 	self assert: theResults size equals: 1.
 	self assert: theResults first class equals: GtExecutorTaskItSuccessfulAnnouncement.
 	^ anAnswer
@@ -59,12 +56,15 @@ GtExecutorDecoratorExamples >> answerOfTaskItCommand_SubscribeAfterExecution [
 { #category : #'*GToolkit-Executor-TaskIt' }
 GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand [
 	<gtExample>
-	| aBuilder aCommand anAnswer theResults aSemaphore aTimeout |
+	| aDecorator aCommand anAnswer theResults aSemaphore |
 	theResults := OrderedCollection new.
 	aSemaphore := Semaphore new.
-	aBuilder := self decoratorWithTaskItFailingSubCommand.
+	aDecorator := self decoratorWithTaskItFailingSubCommand.
+	aDecorator commands first valuable: [ :aSubCommand | 
+		theResults add: ZeroDivide.
+		aSubCommand result: 108 / 0 ].
 	aCommand := self valuableCommand.
-	anAnswer := aBuilder execute: aCommand.
+	anAnswer := aDecorator execute: aCommand.
 	self
 		assert: anAnswer class
 		equals: GtExecutorTaskItAnswer.
@@ -75,15 +75,13 @@ GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand [
 		whenFailureDo: [ :anAnnouncement | 
 			theResults add: anAnnouncement. 
 			aSemaphore signal ].
-	aTimeout := aSemaphore waitTimeoutSeconds: 10.
-	self 
-		assert: aTimeout not 
-		description: 'TaskIt process has not finshed on time'.
-	self assert: theResults size equals: 1.
-	self assert: theResults first class equals: GtExecutorTaskItSuccessfulAnnouncement.
-	self assert: theResults first answer equals: anAnswer.
-	self assert: theResults first subAnswer isAnswer.
-	self assert: theResults first subAnswer isFailure.
+	self assertSemaphoreTimeout: aSemaphore.
+	self assert: theResults size equals: 2.
+	self assert: theResults first equals: ZeroDivide.
+	self assert: theResults second class equals: GtExecutorTaskItSuccessfulAnnouncement.
+	self assert: theResults second answer equals: anAnswer.
+	self assert: theResults second subAnswer isAnswer.
+	self assert: theResults second subAnswer isFailure.
 	self assert: aCommand hasAnswer.
 	self assert: aCommand answer value equals: 42.
 	^ anAnswer
@@ -92,7 +90,7 @@ GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand [
 { #category : #'*GToolkit-Executor-TaskIt' }
 GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand_SubscribeAfterExecution [
 	<gtExample>
-	| anAnswer theResults aSemaphore aTimeout |
+	| anAnswer theResults aSemaphore |
 	theResults := OrderedCollection new.
 	aSemaphore := Semaphore new.
 	anAnswer := self answerOfTaskItFailingSubCommand.
@@ -103,15 +101,156 @@ GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand_SubscribeAfterExe
 		whenFailureDo: [ :anAnnouncement | 
 			theResults add: anAnnouncement. 
 			aSemaphore signal ].
-	aTimeout := aSemaphore waitTimeoutSeconds: 10.
-	self 
-		assert: aTimeout not 
-		description: 'TaskIt process has not finshed on time'.
+	self assertSemaphoreTimeout: aSemaphore.
 	self assert: theResults size equals: 1.
 	self assert: theResults first class equals: GtExecutorTaskItSuccessfulAnnouncement.
 	self assert: theResults first answer equals: anAnswer.
 	self assert: theResults first subAnswer isAnswer.
 	self assert: theResults first subAnswer isFailure.
+	^ anAnswer
+]
+
+{ #category : #'*GToolkit-Executor-TaskIt' }
+GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand_ThreeSecondsLong [
+	<gtExample>
+	| aDecorator aCommand anAnswer |
+	aDecorator := self decoratorWithTaskItFailingSubCommand.
+	aDecorator commands first valuable: [ :aSubCommand | 
+		3 seconds wait.
+		aSubCommand result: 108 / 0 ].
+	aCommand := self valuableCommand.
+	anAnswer := aDecorator execute: aCommand.
+	self
+		assert: anAnswer class
+		equals: GtExecutorTaskItAnswer.
+	^ anAnswer
+]
+
+{ #category : #'*GToolkit-Executor-TaskIt' }
+GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand_WhenDo_FailureAnnouncement [
+	<gtExample>
+	| aDecorator aCommand anAnswer theResults aSemaphore aSubscriptionAdaptor |
+	theResults := OrderedCollection new.
+	aSemaphore := Semaphore new.
+	aDecorator := self decoratorWithTaskItFailingSubCommand.
+	aDecorator exceptionHandler: self basicPassingExceptionHandler.
+	aCommand := self valuableCommand.
+	anAnswer := aDecorator execute: aCommand.
+	self
+		assert: anAnswer class
+		equals: GtExecutorTaskItAnswer.
+	aSubscriptionAdaptor := anAnswer 
+		when: GtExecutorTaskItFailureAnnouncement 
+		do: [ :anAnnouncement | 
+			theResults add: anAnnouncement. 
+			aSemaphore signal ].
+	anAnswer 
+		whenSuccessDo: [ :anAnnouncement | 
+			theResults add: anAnnouncement. 
+			aSemaphore signal ].
+	self assertSemaphoreTimeout: aSemaphore.
+	
+	"Assert results"
+	self assert: theResults size equals: 1.
+	self assert: theResults first class equals: GtExecutorTaskItFailureAnnouncement.
+	self assert: theResults first answer equals: anAnswer.
+	self assert: theResults first exception class equals: ZeroDivide.
+	
+	"Assert the subscription adaptor"
+	self assert: aSubscriptionAdaptor hasAdaptors.
+	self assert: aSubscriptionAdaptor adaptors size equals: 1.
+	self
+		assert: aSubscriptionAdaptor adaptors first subscription announcementClass
+		equals: GtExecutorTaskItFailureAnnouncement.
+	
+	"Assert the command answer"
+	self assert: aCommand hasAnswer.
+	self assert: aCommand answer value equals: 42.
+	^ anAnswer
+]
+
+{ #category : #'*GToolkit-Executor-TaskIt' }
+GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand_WhenDo_SuccessfulAnnouncement [
+	<gtExample>
+	| anAnswer theResults aSemaphore aSubscriptionAdaptor |
+	theResults := OrderedCollection new.
+	aSemaphore := Semaphore new.
+	anAnswer := self answerOfTaskItFailingSubCommand.
+	aSubscriptionAdaptor := anAnswer 
+		when: GtExecutorTaskItSuccessfulAnnouncement 
+		do: [ :anAnnouncement | 
+			theResults add: anAnnouncement. 
+			aSemaphore signal ].
+	self assertSemaphoreTimeout: aSemaphore.
+	
+	"Assert results"
+	self assert: theResults size equals: 1.
+	self assert: theResults first class equals: GtExecutorTaskItSuccessfulAnnouncement.
+	self assert: theResults first answer equals: anAnswer.
+	self assert: theResults first subAnswer isAnswer.
+	self assert: theResults first subAnswer isFailure.
+	
+	"Assert the subscription adaptor"
+	self assert: aSubscriptionAdaptor hasAdaptors.
+	self assert: aSubscriptionAdaptor adaptors size equals: 1.
+	self
+		assert: aSubscriptionAdaptor adaptors first subscription announcementClass
+		equals: GtExecutorTaskItSuccessfulAnnouncement.
+	^ anAnswer
+]
+
+{ #category : #'*GToolkit-Executor-TaskIt' }
+GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand_WhenDo_TaskItAnnouncement [
+	<gtExample>
+	| aDecorator aCommand anAnswer theResults aSemaphore aSubscriptionAdaptor |
+	theResults := OrderedCollection new.
+	aSemaphore := Semaphore new.
+	aDecorator := self decoratorWithTaskItFailingSubCommand.
+	aDecorator exceptionHandler: self basicPassingExceptionHandler.
+	aCommand := self valuableCommand.
+	anAnswer := aDecorator execute: aCommand.
+	self
+		assert: anAnswer class
+		equals: GtExecutorTaskItAnswer.
+	aSubscriptionAdaptor := anAnswer 
+		when: GtExecutorTaskItAnnouncement
+		do: [ :anAnnouncement | 
+			theResults add: anAnnouncement. 
+			aSemaphore signal ].
+	anAnswer 
+		whenSuccessDo: [ :anAnnouncement | 
+			theResults add: anAnnouncement. 
+			aSemaphore signal ].
+	self assertSemaphoreTimeout: aSemaphore.
+	
+	"Assert results"
+	self assert: theResults size equals: 1.
+	self assert: theResults first class equals: GtExecutorTaskItFailureAnnouncement.
+	self assert: theResults first answer equals: anAnswer.
+	self assert: theResults first exception class equals: ZeroDivide.
+	
+	"Assert the subscription adaptor"
+	self assert: aSubscriptionAdaptor hasAdaptors.
+	self assert: aSubscriptionAdaptor adaptors size equals: 2.
+	self
+		assert: aSubscriptionAdaptor adaptors first subscription announcementClass
+		equals: GtExecutorTaskItFailureAnnouncement.
+	self
+		assert: aSubscriptionAdaptor adaptors second subscription isNil.
+	
+	"Assert the command answer"
+	self assert: aCommand hasAnswer.
+	self assert: aCommand answer value equals: 42.
+	^ anAnswer
+]
+
+{ #category : #'*GToolkit-Executor-TaskIt' }
+GtExecutorDecoratorExamples >> basicTaskItAnswer [
+	<gtExample>
+	| anAnswer |
+	anAnswer := GtExecutorTaskItAnswer new.
+	self assert: anAnswer futureAdaptor isFuture not.
+	self assert: anAnswer announcers isNotNil.
 	^ anAnswer
 ]
 

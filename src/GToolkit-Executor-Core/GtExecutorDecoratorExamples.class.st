@@ -18,10 +18,10 @@ GtExecutorDecoratorExamples >> anotherPostExecutionCommand [
 { #category : #'examples - answers' }
 GtExecutorDecoratorExamples >> answerOfErroneousDecoringCommand [
 	<gtExample>
-	| aBuilder aCommand anAnswer |
-	aBuilder := self decoratorWithErroneousPostExecutionCommand.
+	| aDecorator aCommand anAnswer |
+	aDecorator := self decoratorWithErroneousPostExecutionCommand.
 	aCommand := self valuableCommand.
-	anAnswer := aBuilder execute: aCommand.
+	anAnswer := aDecorator execute: aCommand.
 	self assert: anAnswer isAnswer.
 	self assert: anAnswer hasValue not.
 
@@ -34,10 +34,10 @@ GtExecutorDecoratorExamples >> answerOfErroneousDecoringCommand [
 { #category : #'examples - answers' }
 GtExecutorDecoratorExamples >> answerOfOneDecoringCommand [
 	<gtExample>
-	| aBuilder aCommand anAnswer |
-	aBuilder := self decoratorWithOnePostExecutionCommand.
+	| aDecorator aCommand anAnswer |
+	aDecorator := self decoratorWithOnePostExecutionCommand.
 	aCommand := self valuableCommand.
-	anAnswer := aBuilder execute: aCommand.
+	anAnswer := aDecorator execute: aCommand.
 	self assert: anAnswer isAnswer.
 	self assert: anAnswer hasValue not.
 
@@ -50,10 +50,10 @@ GtExecutorDecoratorExamples >> answerOfOneDecoringCommand [
 { #category : #'examples - answers' }
 GtExecutorDecoratorExamples >> answerOfSecondErroneousPostExecutionCommand [
 	<gtExample>
-	| aBuilder aCommand anAnswer |
-	aBuilder := self decoratorWithSecondErroneousPostExecutionCommand.
+	| aDecorator aCommand anAnswer |
+	aDecorator := self decoratorWithSecondErroneousPostExecutionCommand.
 	aCommand := self valuableCommand.
-	anAnswer := aBuilder execute: aCommand.
+	anAnswer := aDecorator execute: aCommand.
 	self assert: anAnswer isAnswer.
 	self assert: anAnswer hasValue not.
 
@@ -66,10 +66,10 @@ GtExecutorDecoratorExamples >> answerOfSecondErroneousPostExecutionCommand [
 { #category : #'examples - answers' }
 GtExecutorDecoratorExamples >> answerOfTwoDecoringCommands [
 	<gtExample>
-	| aBuilder aCommand anAnswer |
-	aBuilder := self decoratorWithTwoPostExecutionCommands.
+	| aDecorator aCommand anAnswer |
+	aDecorator := self decoratorWithTwoPostExecutionCommands.
 	aCommand := self valuableCommand.
-	anAnswer := aBuilder execute: aCommand.
+	anAnswer := aDecorator execute: aCommand.
 	self assert: anAnswer isAnswer.
 	self assert: anAnswer hasValue not.
 
@@ -82,14 +82,23 @@ GtExecutorDecoratorExamples >> answerOfTwoDecoringCommands [
 { #category : #'examples - answers' }
 GtExecutorDecoratorExamples >> answerOfValuableCommand [
 	<gtExample>
-	| aBuilder aCommand anAnswer |
-	aBuilder := self basicDecorator.
+	| aDecorator aCommand anAnswer |
+	aDecorator := self basicDecorator.
 	aCommand := self valuableCommand.
-	anAnswer := aBuilder execute: aCommand.
+	anAnswer := aDecorator execute: aCommand.
 	self assert: anAnswer isAnswer.
 	self assert: anAnswer hasValue.
 	self assert: aCommand answer value equals: 42.
 	^ anAnswer
+]
+
+{ #category : #assertions }
+GtExecutorDecoratorExamples >> assertSemaphoreTimeout: aSemaphore [
+	| aTimeout |
+	aTimeout := aSemaphore waitTimeoutSeconds: 30.
+	self
+		assert: aTimeout not
+		description: 'TaskIt process has not finished on time'
 ]
 
 { #category : #'examples - decorator' }
@@ -99,6 +108,15 @@ GtExecutorDecoratorExamples >> basicDecorator [
 	aDecorator := self defaultDecorator new.
 	self assert: aDecorator commands size isZero.
 	^ aDecorator
+]
+
+{ #category : #'examples - exception handlers' }
+GtExecutorDecoratorExamples >> basicPassingExceptionHandler [
+	<gtExample>
+	| aHandler |
+	aHandler := GtExecutorExceptionHandler passing.
+	self assert: aHandler isNotNil.
+	^ aHandler
 ]
 
 { #category : #'examples - commands' }
