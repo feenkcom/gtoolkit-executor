@@ -22,6 +22,17 @@ GtExecutorProtoNullCommand >> executeInContext: aGtExecutorExecutionContext [
 	^ GtExecutorExecutionContext skip
 ]
 
+{ #category : #execution }
+GtExecutorProtoNullCommand >> executionStatus [
+	<return: #GtExecutorStatus>
+	^ GtExecutorStatus null
+]
+
+{ #category : #execution }
+GtExecutorProtoNullCommand >> executionStatus: aGtExecutorStatus [
+	"ignore - it is not executed because of #executeInContext: implementation"
+]
+
 { #category : #testing }
 GtExecutorProtoNullCommand >> hasAnswer [
 	^ false

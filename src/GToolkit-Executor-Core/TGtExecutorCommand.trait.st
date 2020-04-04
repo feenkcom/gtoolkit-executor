@@ -15,6 +15,11 @@ TGtExecutorCommand classSide >> exceptionHandlerOptionName [
 	^ #exceptionHandler
 ]
 
+{ #category : #accessing }
+TGtExecutorCommand classSide >> executionStatusOptionName [
+	^ #executionStatus
+]
+
 { #category : #'accessing - options' }
 TGtExecutorCommand >> answer [
 	<return: #GtExecutorAnswer>
@@ -38,6 +43,24 @@ TGtExecutorCommand >> answer: aGtExecutorAnswer [
 TGtExecutorCommand >> executeInContext: aGtExecutorExecutionContext [
 	<return: #GtExecutorExecutionContext>
 	^ aGtExecutorExecutionContext execute: self.
+]
+
+{ #category : #execution }
+TGtExecutorCommand >> executionStatus [
+	<return: #GtExecutorStatus>
+	^ self 
+		optionAt: self class executionStatusOptionName 
+		ifAbsent: [ GtExecutorStatus null ]
+]
+
+{ #category : #execution }
+TGtExecutorCommand >> executionStatus: aGtExecutorStatus [
+	self 
+		assert: [ aGtExecutorStatus isNotNil ]
+		description: [ 'Execution status must be non-nil' ].
+	^ self 
+		optionAt: self class executionStatusOptionName 
+		put: aGtExecutorStatus
 ]
 
 { #category : #'testing - answer' }

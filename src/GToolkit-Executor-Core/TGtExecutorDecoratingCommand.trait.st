@@ -6,6 +6,11 @@ Trait {
 }
 
 { #category : #accessing }
+TGtExecutorDecoratingCommand classSide >> subCommandExecutionContextOptionName [
+	^ #subCommandExecutionContext
+]
+
+{ #category : #accessing }
 TGtExecutorDecoratingCommand >> command [
 	<return: #TGtExecutorProtoCommand>
 	^ self explicitRequirement
@@ -16,4 +21,27 @@ TGtExecutorDecoratingCommand >> commandsDo: oneArgBlock [
 	oneArgBlock cull: self.
 	self command ifNil: [ ^ self ].
 	self command commandsDo: oneArgBlock
+]
+
+{ #category : #execution }
+TGtExecutorDecoratingCommand >> executeInContext: aGtExecutorExecutionContext [
+	<return: #GtExecutorExecutionContext>
+	self subCommandExecutionContext: aGtExecutorExecutionContext.
+	^ aGtExecutorExecutionContext execute: self.
+]
+
+{ #category : #'private - accessing' }
+TGtExecutorDecoratingCommand >> subCommandExecutionContext [
+	<return: #GtExecutorExecutionContext>
+	^ self 
+		optionAt: self class subCommandExecutionContextOptionName 
+		ifAbsent: [ GtExecutorExecutionContext null ]
+]
+
+{ #category : #'private - accessing' }
+TGtExecutorDecoratingCommand >> subCommandExecutionContext: aGtExecutorExecutionContext [
+	self assertOptionDoesNotExist: self class subCommandExecutionContextOptionName.
+	self 
+		optionAt: self class subCommandExecutionContextOptionName 
+		put: aGtExecutorExecutionContext
 ]

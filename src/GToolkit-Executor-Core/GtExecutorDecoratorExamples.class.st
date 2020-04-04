@@ -59,7 +59,7 @@ GtExecutorDecoratorExamples >> answerOfSecondErroneousPostExecutionCommand [
 
 	self assert: aCommand hasAnswer.
 	self assert: aCommand hasValue.
-	self assert: aCommand answer value equals: 42.
+	self assert: aCommand answer value equals: 72.
 	^ anAnswer
 ]
 
@@ -340,7 +340,7 @@ GtExecutorDecoratorExamples >> executionOfSecondErroneousPostExecutionCommand [
 	aCommand := self valuableCommand.
 	aBuilder execute: aCommand.
 	self assert: aCommand hasAnswer.
-	self assert: aCommand answer value equals: 42.
+	self assert: aCommand answer value equals: 72.
 	^ aCommand
 ]
 

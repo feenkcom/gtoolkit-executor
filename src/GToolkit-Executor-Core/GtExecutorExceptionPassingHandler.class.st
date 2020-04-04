@@ -7,6 +7,9 @@ Class {
 { #category : #'execution - double dispatch' }
 GtExecutorExceptionPassingHandler >> run: aCommand [
 	<return: #GtExecutorExecutionContext>
-	aCommand execute.
-	^ GtExecutorExecutionContext continue.
+	^ self 
+		secureExecution: aCommand 
+		onException: [ :anException :theCommand | 
+			theCommand answer: (GtExecutorAnswer exception: anException).
+			anException pass ]
 ]

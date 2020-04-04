@@ -32,7 +32,7 @@ GtExecutorDecoratingCommand >> defaultCommand [
 
 { #category : #'private - execution' }
 GtExecutorDecoratingCommand >> executeSubCommand [
-	self command execute
+	self command executeInContext: self subCommandExecutionContext
 ]
 
 { #category : #initialization }

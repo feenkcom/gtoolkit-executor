@@ -28,6 +28,17 @@ TGtExecutorProtoCommand >> executeInContext: aGtExecutorExecutionContext [
 	^ self explicitRequirement
 ]
 
+{ #category : #execution }
+TGtExecutorProtoCommand >> executionStatus [
+	<return: #GtExecutorStatus>
+	^ self explicitRequirement
+]
+
+{ #category : #execution }
+TGtExecutorProtoCommand >> executionStatus: aGtExecutorStatus [
+	^ self explicitRequirement
+]
+
 { #category : #testing }
 TGtExecutorProtoCommand >> hasAnswer [
 	<return: #Boolean>

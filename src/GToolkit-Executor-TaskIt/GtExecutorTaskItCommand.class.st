@@ -7,11 +7,6 @@ Class {
 	#category : #'GToolkit-Executor-TaskIt-Commands'
 }
 
-{ #category : #accessing }
-GtExecutorTaskItCommand class >> subCommandExecutionContextOptionName [
-	^ #subCommandExecutionContext
-]
-
 { #category : #asserting }
 GtExecutorTaskItCommand >> assertCallback: aCallback [
 	self
@@ -27,13 +22,6 @@ GtExecutorTaskItCommand >> execute [
 	BlUseAsyncFeatures
 		ifEnabledDo: [ self executeSubCommandInPool ]
 		otherwise: [ self executeSubCommandInSameProcess ]
-]
-
-{ #category : #execution }
-GtExecutorTaskItCommand >> executeInContext: aGtExecutorExecutionContext [
-	<return: #GtExecutorExecutionContext>
-	self subCommandExecutionContext: aGtExecutorExecutionContext.
-	^ super executeInContext: aGtExecutorExecutionContext
 ]
 
 { #category : #'private - execution' }
@@ -59,6 +47,7 @@ GtExecutorTaskItCommand >> executeSubCommandInSameProcess [
 { #category : #'private - execution' }
 GtExecutorTaskItCommand >> newFuture [
 	<return: #TKTFuture>
+	self flag: 'asBlTktCommand should be used'.
 	^ self pool future: [ 
 			self command executeInContext: self subCommandExecutionContext.
 			self command ]
@@ -80,20 +69,4 @@ GtExecutorTaskItCommand >> pool: aBlTktCommonQueueWorkerPool [
 { #category : #printing }
 GtExecutorTaskItCommand >> printOn: aStream [
 	aStream nextPutAll: 'TaskIt execution'
-]
-
-{ #category : #'private - accessing' }
-GtExecutorTaskItCommand >> subCommandExecutionContext [
-	<return: #GtExecutorExecutionContext>
-	^ self 
-		optionAt: self class subCommandExecutionContextOptionName 
-		ifAbsent: [ GtExecutorExecutionContext null ]
-]
-
-{ #category : #'private - accessing' }
-GtExecutorTaskItCommand >> subCommandExecutionContext: aGtExecutorExecutionContext [
-	self assertOptionDoesNotExist: self class subCommandExecutionContextOptionName.
-	self 
-		optionAt: self class subCommandExecutionContextOptionName 
-		put: aGtExecutorExecutionContext
 ]
