@@ -64,7 +64,9 @@ GtExecutorReplacingDecoratorExamples >> executionWithFirstReplacedCommand [
 	aBuilder := self decoratorWithFirstReplacedCommand.
 	aCommand := self valuableCommand.
 	aBuilder execute: aCommand.
-	self assert: aCommand result equals: 72.
+	self assert: aCommand answer isAnswer.
+	self assert: aCommand answer hasValue.
+	self assert: aCommand answer value equals: 72.
 	^ aCommand
 ]
 
@@ -75,7 +77,9 @@ GtExecutorReplacingDecoratorExamples >> executionWithSecondReplacedCommand [
 	aBuilder := self decoratorWithSecondReplacedCommand.
 	aCommand := self valuableCommand.
 	aBuilder execute: aCommand.
-	self assert: aCommand result equals: 1080.
+	self assert: aCommand answer isAnswer.
+	self assert: aCommand answer hasValue.
+	self assert: aCommand answer value equals: 1080.
 	^ aCommand
 ]
 

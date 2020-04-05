@@ -1,7 +1,11 @@
-Extension { #name : #GtExecutorDecoratorExamples }
+Class {
+	#name : #GtExecutorTaskItExamples,
+	#superclass : #GtExecutorReplacingDecoratorExamples,
+	#category : #'GToolkit-Executor-TaskIt-Examples'
+}
 
-{ #category : #'*GToolkit-Executor-TaskIt' }
-GtExecutorDecoratorExamples >> answerOfTaskItCommand [
+{ #category : #'examples - answers' }
+GtExecutorTaskItExamples >> answerOfTaskItCommand [
 	<gtExample>
 	| aDecorator aCommand anAnswer theResults aSemaphore |
 	theResults := OrderedCollection new.
@@ -30,8 +34,8 @@ GtExecutorDecoratorExamples >> answerOfTaskItCommand [
 	^ anAnswer
 ]
 
-{ #category : #'*GToolkit-Executor-TaskIt' }
-GtExecutorDecoratorExamples >> answerOfTaskItCommand_SubscribeAfterExecution [
+{ #category : #'examples - answers' }
+GtExecutorTaskItExamples >> answerOfTaskItCommand_SubscribeAfterExecution [
 	<gtExample>
 	| anAnswer theResults aSemaphore aTimeout |
 	theResults := OrderedCollection new.
@@ -53,8 +57,8 @@ GtExecutorDecoratorExamples >> answerOfTaskItCommand_SubscribeAfterExecution [
 	^ anAnswer
 ]
 
-{ #category : #'*GToolkit-Executor-TaskIt' }
-GtExecutorDecoratorExamples >> answerOfTaskItFailingPostExecutionSubCommand_ThreeSecondsLong [
+{ #category : #'examples - answers' }
+GtExecutorTaskItExamples >> answerOfTaskItFailingPostExecutionSubCommand_ThreeSecondsLong [
 	<gtExample>
 	| aDecorator aCommand anAnswer |
 	aDecorator := self decoratorWithTaskItFailingPostExecutionSubCommand.
@@ -69,8 +73,8 @@ GtExecutorDecoratorExamples >> answerOfTaskItFailingPostExecutionSubCommand_Thre
 	^ anAnswer
 ]
 
-{ #category : #'*GToolkit-Executor-TaskIt' }
-GtExecutorDecoratorExamples >> answerOfTaskItFailingPreExecutionSubCommand_ThreeSecondsLong [
+{ #category : #'examples - answers' }
+GtExecutorTaskItExamples >> answerOfTaskItFailingPreExecutionSubCommand_ThreeSecondsLong [
 	<gtExample>
 	| aDecorator aCommand anAnswer |
 	aDecorator := self decoratorWithTaskItFailingPreExecutionSubCommand.
@@ -85,8 +89,8 @@ GtExecutorDecoratorExamples >> answerOfTaskItFailingPreExecutionSubCommand_Three
 	^ anAnswer
 ]
 
-{ #category : #'*GToolkit-Executor-TaskIt' }
-GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand [
+{ #category : #'examples - answers' }
+GtExecutorTaskItExamples >> answerOfTaskItFailingSubCommand [
 	<gtExample>
 	| aDecorator aCommand anAnswer theResults aSemaphore |
 	theResults := OrderedCollection new.
@@ -119,8 +123,8 @@ GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand [
 	^ anAnswer
 ]
 
-{ #category : #'*GToolkit-Executor-TaskIt' }
-GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand_SubscribeAfterExecution [
+{ #category : #'examples - answers' }
+GtExecutorTaskItExamples >> answerOfTaskItFailingSubCommand_SubscribeAfterExecution [
 	<gtExample>
 	| anAnswer theResults aSemaphore |
 	theResults := OrderedCollection new.
@@ -142,8 +146,8 @@ GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand_SubscribeAfterExe
 	^ anAnswer
 ]
 
-{ #category : #'*GToolkit-Executor-TaskIt' }
-GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand_WhenDo_FailureAnnouncement [
+{ #category : #'examples - answers' }
+GtExecutorTaskItExamples >> answerOfTaskItFailingSubCommand_WhenDo_FailureAnnouncement [
 	<gtExample>
 	| aDecorator aCommand anAnswer theResults aSemaphore aSubscriptionAdaptor |
 	theResults := OrderedCollection new.
@@ -185,8 +189,8 @@ GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand_WhenDo_FailureAnn
 	^ anAnswer
 ]
 
-{ #category : #'*GToolkit-Executor-TaskIt' }
-GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand_WhenDo_SuccessfulAnnouncement [
+{ #category : #'examples - answers' }
+GtExecutorTaskItExamples >> answerOfTaskItFailingSubCommand_WhenDo_SuccessfulAnnouncement [
 	<gtExample>
 	| anAnswer theResults aSemaphore aSubscriptionAdaptor |
 	theResults := OrderedCollection new.
@@ -215,8 +219,8 @@ GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand_WhenDo_Successful
 	^ anAnswer
 ]
 
-{ #category : #'*GToolkit-Executor-TaskIt' }
-GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand_WhenDo_TaskItAnnouncement [
+{ #category : #'examples - answers' }
+GtExecutorTaskItExamples >> answerOfTaskItFailingSubCommand_WhenDo_TaskItAnnouncement [
 	<gtExample>
 	| aDecorator aCommand anAnswer theResults aSemaphore aSubscriptionAdaptor |
 	theResults := OrderedCollection new.
@@ -260,8 +264,8 @@ GtExecutorDecoratorExamples >> answerOfTaskItFailingSubCommand_WhenDo_TaskItAnno
 	^ anAnswer
 ]
 
-{ #category : #'*GToolkit-Executor-TaskIt' }
-GtExecutorDecoratorExamples >> basicTaskItAnswer [
+{ #category : #'examples - answers' }
+GtExecutorTaskItExamples >> basicTaskItAnswer [
 	<gtExample>
 	| anAnswer |
 	anAnswer := GtExecutorTaskItAnswer new.
@@ -270,8 +274,8 @@ GtExecutorDecoratorExamples >> basicTaskItAnswer [
 	^ anAnswer
 ]
 
-{ #category : #'*GToolkit-Executor-TaskIt' }
-GtExecutorDecoratorExamples >> basicTaskItCommand [
+{ #category : #'examples - commands' }
+GtExecutorTaskItExamples >> basicTaskItCommand [
 	<gtExample>
 	| aCommand |
 	aCommand := GtExecutorTaskItCommand new.
@@ -280,8 +284,8 @@ GtExecutorDecoratorExamples >> basicTaskItCommand [
 	^ aCommand
 ]
 
-{ #category : #'*GToolkit-Executor-TaskIt' }
-GtExecutorDecoratorExamples >> decoratorWithTaskItCommand [
+{ #category : #'examples - commands' }
+GtExecutorTaskItExamples >> decoratorWithTaskItCommand [
 	<gtExample>
 	| aDecorator aCommand |
 	aDecorator := self basicDecorator.
@@ -292,8 +296,8 @@ GtExecutorDecoratorExamples >> decoratorWithTaskItCommand [
 	^ aDecorator
 ]
 
-{ #category : #'*GToolkit-Executor-TaskIt' }
-GtExecutorDecoratorExamples >> decoratorWithTaskItFailingPostExecutionSubCommand [
+{ #category : #'examples - commands' }
+GtExecutorTaskItExamples >> decoratorWithTaskItFailingPostExecutionSubCommand [
 	<gtExample>
 	| aDecorator aCommand |
 	aDecorator := self decoratorWithErroneousPostExecutionCommand.
@@ -304,8 +308,8 @@ GtExecutorDecoratorExamples >> decoratorWithTaskItFailingPostExecutionSubCommand
 	^ aDecorator
 ]
 
-{ #category : #'*GToolkit-Executor-TaskIt' }
-GtExecutorDecoratorExamples >> decoratorWithTaskItFailingPreExecutionSubCommand [
+{ #category : #'examples - commands' }
+GtExecutorTaskItExamples >> decoratorWithTaskItFailingPreExecutionSubCommand [
 	<gtExample>
 	| aDecorator aCommand |
 	aDecorator := self decoratorWithErroneousPreExecutionCommand.
@@ -316,8 +320,8 @@ GtExecutorDecoratorExamples >> decoratorWithTaskItFailingPreExecutionSubCommand 
 	^ aDecorator
 ]
 
-{ #category : #'*GToolkit-Executor-TaskIt' }
-GtExecutorDecoratorExamples >> executionWithTaskItCommand [
+{ #category : #'examples - commands' }
+GtExecutorTaskItExamples >> executionWithTaskItCommand [
 	<gtExample>
 	| aBuilder aCommand |
 	aBuilder := self decoratorWithTaskItCommand.
@@ -327,8 +331,8 @@ GtExecutorDecoratorExamples >> executionWithTaskItCommand [
 	^ aCommand
 ]
 
-{ #category : #'*GToolkit-Executor-TaskIt' }
-GtExecutorDecoratorExamples >> executionWithTaskItFailingSubCommand [
+{ #category : #'examples - commands' }
+GtExecutorTaskItExamples >> executionWithTaskItFailingSubCommand [
 	<gtExample>
 	| aBuilder aCommand |
 	aBuilder := self decoratorWithTaskItFailingPostExecutionSubCommand.
