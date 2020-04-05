@@ -401,7 +401,7 @@ GtExecutorDecoratorExamples >> nullAnswer [
 	^ anAnswer
 ]
 
-{ #category : #'examples - decorated commands' }
+{ #category : #'examples - decorating commands' }
 GtExecutorDecoratorExamples >> oneDecoratingCommand [
 	<gtExample>
 	| aDecorator aCommand aDecoratingCommand aTempCommand |
@@ -448,7 +448,7 @@ GtExecutorDecoratorExamples >> preExecutionCommand [
 	^ aCommand
 ]
 
-{ #category : #'examples - decorated commands' }
+{ #category : #'examples - decorating commands' }
 GtExecutorDecoratorExamples >> twoDecoratingCommands [
 	<gtExample>
 	| aDecorator aCommand aDecoratingCommand aTempCommand |

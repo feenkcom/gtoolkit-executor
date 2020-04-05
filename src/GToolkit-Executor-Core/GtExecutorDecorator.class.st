@@ -40,7 +40,9 @@ GtExecutorDecorator >> decorate: aCommand [
 	^ self commands 
 		inject: aCommand 
 		into: [ :aComposition :eachDecoratedCommand |
-			eachDecoratedCommand copy command: aComposition ].
+			eachDecoratedCommand copy 
+				configurations: aComposition configurations;
+				command: aComposition ].
 ]
 
 { #category : #defaults }

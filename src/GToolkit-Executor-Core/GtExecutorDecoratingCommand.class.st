@@ -35,6 +35,14 @@ GtExecutorDecoratingCommand >> executeSubCommand [
 	self command executeInContext: self subCommandExecutionContext
 ]
 
+{ #category : #'private - execution' }
+GtExecutorDecoratingCommand >> executeSubCommandAndAnswer: anAnswer [
+	self executeSubCommand.
+	self command answer isSuccess
+		ifTrue: [ self answer: anAnswer ] 
+		ifFalse: [ self answer: (GtExecutorAnswer subCommandFailure: self command) ]
+]
+
 { #category : #initialization }
 GtExecutorDecoratingCommand >> initialize [
 	super initialize.

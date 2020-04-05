@@ -37,6 +37,11 @@ GtExecutorAnswer class >> null [
 ]
 
 { #category : #factory }
+GtExecutorAnswer class >> subCommandFailure: aCommand [
+	^ GtExecutorSubCommandFailureAnswer new subCommand: aCommand
+]
+
+{ #category : #factory }
 GtExecutorAnswer class >> value: anObject [
 	^ GtExecutorSuccessfulAnswerWithValue new value: anObject
 ]

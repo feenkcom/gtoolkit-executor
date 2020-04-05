@@ -10,6 +10,11 @@ TGtExecutorCommand classSide >> answerOptionName [
 	^ #commandAnswer
 ]
 
+{ #category : #'as yet unclassified' }
+TGtExecutorCommand classSide >> configurationsOptionName [
+	^ #configurations
+]
+
 { #category : #accessing }
 TGtExecutorCommand classSide >> exceptionHandlerOptionName [
 	^ #exceptionHandler
@@ -20,7 +25,7 @@ TGtExecutorCommand classSide >> executionStatusOptionName [
 	^ #executionStatus
 ]
 
-{ #category : #'accessing - options' }
+{ #category : #answers }
 TGtExecutorCommand >> answer [
 	<return: #GtExecutorAnswer>
 	^ self 
@@ -28,7 +33,7 @@ TGtExecutorCommand >> answer [
 		ifAbsent: [ GtExecutorAnswer null ]
 ]
 
-{ #category : #'accessing - options' }
+{ #category : #answers }
 TGtExecutorCommand >> answer: aGtExecutorAnswer [
 	self 
 		assert: [ aGtExecutorAnswer isNotNil ]
@@ -37,6 +42,26 @@ TGtExecutorCommand >> answer: aGtExecutorAnswer [
 	^ self 
 		optionAt: self class answerOptionName 
 		put: aGtExecutorAnswer
+]
+
+{ #category : #configurations }
+TGtExecutorCommand >> assertConfigurations [
+	self 
+		assert: [ self hasConfigurations ]
+		description: [ 'Executor configurations is required' ]
+]
+
+{ #category : #configurations }
+TGtExecutorCommand >> configurations [
+	<return: #GtExecutorConfigurations>
+	^ self
+		optionAt: self class configurationsOptionName
+		ifAbsent: [ self defaultConfigurations ]
+]
+
+{ #category : #configurations }
+TGtExecutorCommand >> defaultConfigurations [
+	^ GtExecutorConfigurations default
 ]
 
 { #category : #execution }
@@ -63,13 +88,19 @@ TGtExecutorCommand >> executionStatus: aGtExecutorStatus [
 		put: aGtExecutorStatus
 ]
 
-{ #category : #'testing - answer' }
+{ #category : #answers }
 TGtExecutorCommand >> hasAnswer [
 	<return: #Boolean>
 	^ self answer isAnswer
 ]
 
-{ #category : #'testing - answer' }
+{ #category : #configurations }
+TGtExecutorCommand >> hasConfigurations [
+	<return: #Boolean>
+	^ self configurations isConfigurations
+]
+
+{ #category : #answers }
 TGtExecutorCommand >> hasValue [
 	<return: #Boolean>
 	^ self answer hasValue

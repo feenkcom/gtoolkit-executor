@@ -23,6 +23,24 @@ TGtExecutorDecoratingCommand >> commandsDo: oneArgBlock [
 	self command commandsDo: oneArgBlock
 ]
 
+{ #category : #configurations }
+TGtExecutorDecoratingCommand >> configurations: aGtExecutorConfigurations [
+	self 
+		assert: [ aGtExecutorConfigurations isNotNil ]
+		description: [ 'Executor configurations must be non-nil' ].
+	self 
+		assert: [ aGtExecutorConfigurations isConfigurations ]
+		description: [ 'Executor configurations must be a real configurations instance (not null pattern)' ].
+	^ self
+		optionAt: self class configurationsOptionName
+		put: aGtExecutorConfigurations
+]
+
+{ #category : #configurations }
+TGtExecutorDecoratingCommand >> defaultConfigurations [ 
+	^ GtExecutorConfigurations null
+]
+
 { #category : #execution }
 TGtExecutorDecoratingCommand >> executeInContext: aGtExecutorExecutionContext [
 	<return: #GtExecutorExecutionContext>
