@@ -30,3 +30,10 @@ GtExecutorConfigurations >> common [
 GtExecutorConfigurations >> isConfigurations [
 	^ true
 ]
+
+{ #category : #accessing }
+GtExecutorConfigurations >> result [
+	^ self 
+		optionAt: #result 
+		ifAbsentPut: [ GtExecutorResultConfiguration new ]
+]

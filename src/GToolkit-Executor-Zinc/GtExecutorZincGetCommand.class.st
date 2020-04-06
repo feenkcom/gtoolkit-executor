@@ -7,9 +7,20 @@ Class {
 	#category : #'GToolkit-Executor-Zinc-Commands'
 }
 
+{ #category : #accessing }
+GtExecutorZincGetCommand >> answerBuilder [
+	^ GtExecutorZincAnswerBuilder new
+]
+
 { #category : #defaults }
 GtExecutorZincGetCommand >> defaultSegments [
 	^ #()
+]
+
+{ #category : #execution }
+GtExecutorZincGetCommand >> execute [
+	self setUrlPath.
+	self requestResponseAndSetResponse.
 ]
 
 { #category : #initialization }
@@ -24,6 +35,18 @@ GtExecutorZincGetCommand >> printOn: aStream [
 	aStream 
 		nextPutAll: 'GET ';
 		print: self url
+]
+
+{ #category : #'private - execution' }
+GtExecutorZincGetCommand >> requestResponseAndSetResponse [
+	[ 
+		| aResponse |
+		aResponse := self zincClient get; response.
+		self response: aResponse.
+		self setAnswerFromResponse: aResponse.
+	] on: Error do: [ :anException | 
+		self setAnswerFromException: anException ].
+	
 ]
 
 { #category : #accessing }
@@ -41,6 +64,25 @@ GtExecutorZincGetCommand >> segments: anArray [
 		assert: [ anArray allSatisfy: #isString ] 
 		description: [ 'Segments must be an array of strings' ].
 	segments := anArray
+]
+
+{ #category : #'private - execution' }
+GtExecutorZincGetCommand >> setAnswerFromException: anException [
+	self answer: (GtExecutorAnswer exception: anException)
+]
+
+{ #category : #'private - execution' }
+GtExecutorZincGetCommand >> setAnswerFromResponse: aResponse [
+	| anAnswer |
+	anAnswer := self answerBuilder
+		response: aResponse;
+		build.
+	self answer: anAnswer.
+]
+
+{ #category : #'private - execution' }
+GtExecutorZincGetCommand >> setUrlPath [
+	self zincClient addPathSegments: self segments
 ]
 
 { #category : #convenient }

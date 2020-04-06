@@ -9,11 +9,9 @@ Class {
 
 { #category : #execution }
 GtExecutorZincServiceUrlCommand >> execute [
-	| aClient |
 	self assertConfigurations.
-	aClient := self configurations zinc client.
-	aClient url: self url.
-	self executeSubCommandAndAnswer: (GtExecutorAnswer value: self url).
+	self zincClient url: self url.
+	self executeSubCommandAndAnswer: (GtExecutorAnswer value: self url)
 ]
 
 { #category : #accessing }

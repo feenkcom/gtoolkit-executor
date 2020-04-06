@@ -24,3 +24,12 @@ GtExecutorConfiguration >> printOn: aStream [
 		nextPutAll: 'Configuration ';
 		print: self name asString
 ]
+
+{ #category : #signalling }
+GtExecutorConfiguration >> signalMissingValueOfName: aName [
+	^ NotFound new
+		object: aName;
+		collection: self;
+		messageText: aName asString, ' must be set first';
+		signal
+]
