@@ -1,21 +1,20 @@
 Class {
 	#name : #GtExecutorZincAnswerBuilder,
 	#superclass : #GtExecutorZincProtoAnswerBuilder,
-	#instVars : [
-		'response'
-	],
+	#traits : 'TGtExecutorZincResponseAccess',
+	#classTraits : 'TGtExecutorZincResponseAccess classTrait',
 	#category : #'GToolkit-Executor-Zinc-Answers Builder'
 }
 
-{ #category : #accessing }
-GtExecutorZincAnswerBuilder >> response [
-	^ response
+{ #category : #building }
+GtExecutorZincAnswerBuilder >> build [
+	<return: #ZnExecutorAnswer>
+	| aHandler |
+	aHandler := self rootHandlerClass instanceForResponse: self response.
+	^ aHandler build
 ]
 
 { #category : #accessing }
-GtExecutorZincAnswerBuilder >> response: aZnResponse [
-	self 
-		assert: [ aZnResponse isNotNil ] 
-		description: [ 'Zinc response must be non-nil' ].
-	response := aZnResponse
+GtExecutorZincAnswerBuilder >> rootHandlerClass [
+	^ GtExecutorZincResponseToAnswerHandler
 ]

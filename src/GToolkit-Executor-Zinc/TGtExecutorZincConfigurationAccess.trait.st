@@ -1,26 +1,26 @@
 Trait {
-	#name : #TExecutorZincConfigurationAccess,
+	#name : #TGtExecutorZincConfigurationAccess,
 	#category : #'GToolkit-Executor-Zinc-Traits'
 }
 
 { #category : #'accessing - configuration' }
-TExecutorZincConfigurationAccess >> hasResponse [
+TGtExecutorZincConfigurationAccess >> hasResponse [
 	<return: #Boolean>
 	^ self configurations zinc hasResponse
 ]
 
 { #category : #'accessing - configuration' }
-TExecutorZincConfigurationAccess >> response [
+TGtExecutorZincConfigurationAccess >> response [
 	<return: #ZnResponse>
 	^ self configurations zinc response
 ]
 
 { #category : #'accessing - configuration' }
-TExecutorZincConfigurationAccess >> response: aZnResponse [
+TGtExecutorZincConfigurationAccess >> response: aZnResponse [
 	self configurations zinc response: aZnResponse
 ]
 
 { #category : #'accessing - configuration' }
-TExecutorZincConfigurationAccess >> zincClient [
+TGtExecutorZincConfigurationAccess >> zincClient [
 	^ self configurations zinc client
 ]

@@ -19,6 +19,7 @@ GtExecutorZincGetCommand >> defaultSegments [
 
 { #category : #execution }
 GtExecutorZincGetCommand >> execute [
+	self assertClientUrl.
 	self setUrlPath.
 	self requestResponseAndSetResponse.
 ]
@@ -39,14 +40,14 @@ GtExecutorZincGetCommand >> printOn: aStream [
 
 { #category : #'private - execution' }
 GtExecutorZincGetCommand >> requestResponseAndSetResponse [
-	[ 
-		| aResponse |
-		aResponse := self zincClient get; response.
-		self response: aResponse.
-		self setAnswerFromResponse: aResponse.
-	] on: Error do: [ :anException | 
-		self setAnswerFromException: anException ].
-	
+	| aReceiver |
+	aReceiver := GtExecutorRequestReceiver new.
+	aReceiver zincClient: self zincClient.
+	aReceiver get.
+	aReceiver isResponse ifTrue: [ 
+		self setAnswerFromResponse: aReceiver response ].
+	aReceiver isException ifTrue: [ 
+		self setAnswerFromException: aReceiver exception ].
 ]
 
 { #category : #accessing }
@@ -68,7 +69,7 @@ GtExecutorZincGetCommand >> segments: anArray [
 
 { #category : #'private - execution' }
 GtExecutorZincGetCommand >> setAnswerFromException: anException [
-	self answer: (GtExecutorAnswer exception: anException)
+	self answer: (GtExecutorZincNetworkErrorAnswer new exception: anException)
 ]
 
 { #category : #'private - execution' }
@@ -82,7 +83,7 @@ GtExecutorZincGetCommand >> setAnswerFromResponse: aResponse [
 
 { #category : #'private - execution' }
 GtExecutorZincGetCommand >> setUrlPath [
-	self zincClient addPathSegments: self segments
+	self zincClient addPath: self segments
 ]
 
 { #category : #convenient }

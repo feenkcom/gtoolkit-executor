@@ -38,6 +38,9 @@ GtExecutorDecoratingCommand >> executeSubCommand [
 { #category : #'private - execution' }
 GtExecutorDecoratingCommand >> executeSubCommandAndAnswer: anAnswer [
 	self executeSubCommand.
+	self command hasAnswer ifFalse: [ 
+		self answer: anAnswer.
+		^ self ].
 	self command answer isSuccess
 		ifTrue: [ self answer: anAnswer ] 
 		ifFalse: [ self answer: (GtExecutorAnswer subCommandFailure: self command) ]

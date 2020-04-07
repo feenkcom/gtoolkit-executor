@@ -56,7 +56,7 @@ TGtExecutorCommand >> configurations [
 	<return: #GtExecutorConfigurations>
 	^ self
 		optionAt: self class configurationsOptionName
-		ifAbsent: [ self defaultConfigurations ]
+		ifAbsentPut: [ self defaultConfigurations ]
 ]
 
 { #category : #configurations }

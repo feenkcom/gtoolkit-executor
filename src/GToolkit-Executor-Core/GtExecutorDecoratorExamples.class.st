@@ -160,6 +160,20 @@ GtExecutorDecoratorExamples >> basicValuableCommand [
 	^ aCommand
 ]
 
+{ #category : #'examples - execution' }
+GtExecutorDecoratorExamples >> decorateTwoDecoratingCommands [
+	<gtExample>
+	| aBuilder aCommand aDecoratingCommand allCommands |
+	aBuilder := self decoratorWithTwoPostExecutionCommands.
+	aCommand := self valuableCommand.
+	aDecoratingCommand := aBuilder decorate: aCommand.
+	allCommands := aDecoratingCommand allCommands.
+	self assert: allCommands size equals: 3.
+	self assert: allCommands first configurations == allCommands second configurations.
+	self assert: allCommands first configurations == allCommands third configurations.
+	^ aDecoratingCommand
+]
+
 { #category : #'examples - decorator' }
 GtExecutorDecoratorExamples >> decoratorWithErroneousPostExecutionCommand [
 	<gtExample>

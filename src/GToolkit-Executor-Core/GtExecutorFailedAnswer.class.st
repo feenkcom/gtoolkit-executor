@@ -10,6 +10,11 @@ GtExecutorFailedAnswer class >> isAbstract [
 ]
 
 { #category : #testing }
+GtExecutorFailedAnswer >> hasValue [
+	^ false
+]
+
+{ #category : #testing }
 GtExecutorFailedAnswer >> isSuccess [
 	^ false
 ]

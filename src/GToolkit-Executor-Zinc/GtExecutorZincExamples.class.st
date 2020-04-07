@@ -20,6 +20,12 @@ GtExecutorZincExamples >> answerOfServiceUrlCommand [
 	^ anAnswer
 ]
 
+{ #category : #'examples - configurationss' }
+GtExecutorZincExamples >> basicConfigurations [
+	<gtExample>
+	^ GtExecutorConfigurations default 
+]
+
 { #category : #'examples - commands' }
 GtExecutorZincExamples >> basicGetCommand [
 	<gtExample>
@@ -52,6 +58,22 @@ GtExecutorZincExamples >> decoratorWithServiceUrlCommand [
 	self assert: aDecorator commands size equals: 1.
 	self assert: aDecorator commands first equals: aCommand.
 	^ aDecorator
+]
+
+{ #category : #'examples - decorating commands' }
+GtExecutorZincExamples >> executeServiceUrlCommand [
+	<gtExample>
+	| aCommand |
+	aCommand := self serviceUrlCommand.
+	aCommand configurations: self basicConfigurations.
+	aCommand execute.
+	self assert: aCommand configurations zinc client isNotNil.
+	self assert: aCommand configurations zinc client request isNotNil.
+	self assert: aCommand configurations zinc client request url isNotNil.
+	self 
+		assert: aCommand configurations zinc client request url
+		equals: self serviceUrl.
+	^ aCommand configurations zinc client request url
 ]
 
 { #category : #'examples - commands' }

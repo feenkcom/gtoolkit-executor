@@ -9,11 +9,6 @@ GtExecutorSubCommandFailureAnswer class >> subcommandOptionName [
 	^ #subcommand
 ]
 
-{ #category : #testing }
-GtExecutorSubCommandFailureAnswer >> hasValue [
-	^ false
-]
-
 { #category : #printing }
 GtExecutorSubCommandFailureAnswer >> printOn: aStream [ 
 	aStream nextPutAll: 'Answer with sub-command failure'.
